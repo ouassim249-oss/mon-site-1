@@ -137,6 +137,11 @@
 
     if (!frame || !slides.length) return;
 
+    /* Une seule photo : pas de flèches ni de points à afficher.
+       Ils réapparaissent tout seuls dès qu'on ajoute une deuxième .ba-slide. */
+    var nav = root.querySelector('.ba-nav');
+    if (nav) nav.hidden = (slides.length < 2);
+
     /* Points de navigation */
     var dots = [];
     if (dotsBox && slides.length > 1) {
