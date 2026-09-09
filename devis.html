@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devis gratuit en 2 minutes — Carsherwash Rennes</title>
+<meta name="description" content="Obtenez votre devis de nettoyage auto ou mobilier à domicile à Rennes en 5 étapes. Estimation immédiate, réponse rapide, sans engagement.">
+<link rel="canonical" href="https://carsherwash.com/devis.html">
+<meta name="robots" content="noindex, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="index.html" class="brand"><span class="brand-dot"></span> Carsherwash</a>
+    <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><span></span></button>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="auto.html">Voiture</a>
+      <a href="mobilier.html">Mobilier</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="contact.html">Contact</a>
+      <a href="devis.html" class="nav-cta">Devis gratuit</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero hero--sub">
+  <div class="container">
+    <span class="hero-badge">Devis en ligne</span>
+    <h1>Obtenez votre devis en 2 minutes.</h1>
+    <p class="lead">Réponse rapide. Sans engagement. L'estimation s'affiche au fur et à mesure.</p>
+  </div>
+</section>
+
+<section class="section bg-soft">
+  <div class="container">
+
+    <form id="quoteForm" class="wizard reveal" novalidate>
+      <!-- Clé d'envoi Web3Forms (celle déjà utilisée sur carsherwash.com) -->
+      <input type="hidden" name="access_key" value="afc35790-f49b-4881-8123-2294239f941c">
+      <input type="hidden" name="subject" value="Nouvelle demande de devis — Carsherwash">
+      <input type="hidden" name="from_name" value="Site Carsherwash">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+      <!-- Barre de progression -->
+      <div class="wz-bar" aria-hidden="true">
+        <span class="wz-seg"></span><span class="wz-seg"></span><span class="wz-seg"></span>
+        <span class="wz-seg"></span><span class="wz-seg"></span>
+      </div>
+
+      <div class="wz-head">
+        <span class="wz-step" data-wz-step>ÉTAPE 1 / 5</span>
+        <span class="wz-title" data-wz-title>Prestation</span>
+      </div>
+
+      <!-- ============ ÉTAPE 1 — TYPE DE PRESTATION ============ -->
+      <section class="wz-panel" data-panel="1" data-name="Prestation">
+        <p class="wz-q">Que faut-il nettoyer ?</p>
+        <p class="wz-hint">On se déplace à domicile à Rennes et jusqu'à 30 km autour.</p>
+        <div class="wz-choices" data-choice="type">
+          <button type="button" class="wz-choice" data-value="Voiture">🚗 Voiture<small>Intérieur</small></button>
+          <button type="button" class="wz-choice" data-value="Mobilier">🛋️ Mobilier<small>Canapé, matelas…</small></button>
+          <button type="button" class="wz-choice" data-value="Les deux">✨ Les deux<small>Voiture + mobilier</small></button>
+        </div>
+      </section>
+
+      <!-- ============ ÉTAPE 2 — CE QU'IL FAUT NETTOYER ============ -->
+      <section class="wz-panel" data-panel="2" data-name="Véhicules" hidden>
+        <div class="wz-block" data-block="auto">
+          <p class="wz-q">Nombre de véhicules à nettoyer</p>
+          <div class="wz-choices" data-choice="nb">
+            <button type="button" class="wz-choice" data-value="1">1</button>
+            <button type="button" class="wz-choice" data-value="2">2</button>
+            <button type="button" class="wz-choice" data-value="3">3</button>
+            <button type="button" class="wz-choice" data-value="4+">4+</button>
+          </div>
+
+          <p class="wz-sub">Catégorie(s) de véhicule</p>
+          <p class="wz-hint">Sélectionnez plusieurs catégories si vos véhicules ne sont pas du même type.</p>
+          <div class="wz-opts" data-group="categorie">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="Citadine / Berline">
+              <span class="wz-box"></span><span class="wz-opt-name">Citadine / Berline</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="SUV / 4×4">
+              <span class="wz-box"></span><span class="wz-opt-name">SUV / 4×4</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="Van / Monospace">
+              <span class="wz-box"></span><span class="wz-opt-name">Van / Monospace</span>
+            </label>
+          </div>
+          <p class="wz-note">Le tarif est le même quelle que soit la catégorie de véhicule.</p>
+        </div>
+
+        <div class="wz-block" data-block="mobilier" hidden>
+          <p class="wz-sub" data-mob-title>Que faut-il nettoyer ?</p>
+          <p class="wz-hint">Vous choisirez la taille à l'étape suivante.</p>
+          <div class="wz-opts" data-group="meuble">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="droit">
+              <span class="wz-box"></span><span class="wz-opt-name">Canapé droit</span><span class="wz-opt-price">dès 30€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="angle">
+              <span class="wz-box"></span><span class="wz-opt-name">Canapé d'angle</span><span class="wz-opt-price">dès 50€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="matelas">
+              <span class="wz-box"></span><span class="wz-opt-name">Matelas</span><span class="wz-opt-price">dès 35€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="chaise">
+              <span class="wz-box"></span><span class="wz-opt-name">Chaises / tabourets</span><span class="wz-opt-price">dès 10€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="tapis">
+              <span class="wz-box"></span><span class="wz-opt-name">Tapis / moquette</span><span class="wz-opt-price">sur devis</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ÉTAPE 3 — PRESTATION SOUHAITÉE ============ -->
+      <section class="wz-panel" data-panel="3" data-name="Prestation" hidden>
+        <div class="wz-block" data-block="auto">
+          <p class="wz-q">Prestation souhaitée</p>
+          <p class="wz-hint">Sélectionnez une ou plusieurs formules.</p>
+          <div class="wz-opts" data-group="formule">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="sieges">
+              <span class="wz-box"></span><span class="wz-opt-name">Formule Sièges</span><span class="wz-opt-price">dès 40€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="premium">
+              <span class="wz-box"></span><span class="wz-opt-name">Formule Premium</span><span class="wz-opt-price">60€</span>
+            </label>
+          </div>
+
+          <p class="wz-sub">Extras (facultatif)</p>
+          <div class="wz-opts" data-group="extra">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="coffre">
+              <span class="wz-box"></span><span class="wz-opt-name">Nettoyage coffre</span><span class="wz-opt-price">+10€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="deplacement">
+              <span class="wz-box"></span><span class="wz-opt-name">Déplacement dans Rennes</span><span class="wz-opt-price">+5€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="salissures">
+              <span class="wz-box"></span><span class="wz-opt-name">Poils / sable / moisissure</span><span class="wz-opt-price">dès +10€</span>
+            </label>
+          </div>
+          <p class="wz-note">En dehors de Rennes, le tarif de déplacement peut augmenter selon la distance.</p>
+        </div>
+
+        <div class="wz-block" data-block="mobilier" hidden>
+          <p class="wz-sub" data-mob-title2>Taille de votre mobilier</p>
+          <p class="wz-hint">Le tarif dépend du nombre de places.</p>
+          <div class="wz-opts" data-mob-sizes></div>
+        </div>
+      </section>
+
+      <!-- ============ ÉTAPE 4 — VOS INFOS ============ -->
+      <section class="wz-panel" data-panel="4" data-name="Vos infos" hidden>
+        <p class="wz-q">Vos coordonnées</p>
+        <p class="wz-hint">Pour vous envoyer le devis et convenir d'un créneau.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="q-prenom">Prénom *</label>
+            <input type="text" id="q-prenom" name="Prénom" placeholder="Jean" autocomplete="given-name" data-required>
+          </div>
+          <div class="form-group">
+            <label for="q-nom">Nom *</label>
+            <input type="text" id="q-nom" name="Nom" placeholder="Dupont" autocomplete="family-name" data-required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="q-email">Email</label>
+          <input type="email" id="q-email" name="Email" placeholder="jean.dupont@email.com" autocomplete="email">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="q-tel">Téléphone *</label>
+            <input type="tel" id="q-tel" name="Téléphone" placeholder="06 12 34 56 78" autocomplete="tel" data-required>
+          </div>
+          <div class="form-group">
+            <label for="q-cp">Code postal *</label>
+            <input type="text" id="q-cp" name="Code postal" placeholder="35000" inputmode="numeric" autocomplete="postal-code" data-required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="q-ville">Commune d'intervention *</label>
+          <input type="text" id="q-ville" name="Commune" placeholder="Rennes" autocomplete="address-level2" data-required>
+        </div>
+      </section>
+
+      <!-- ============ ÉTAPE 5 — ESTIMATION ============ -->
+      <section class="wz-panel" data-panel="5" data-name="Estimation" hidden>
+        <p class="wz-q">Récapitulatif de votre devis</p>
+        <p class="wz-hint">Vérifiez votre sélection avant l'envoi.</p>
+
+        <div class="form-group">
+          <label for="q-message">Message (facultatif)</label>
+          <textarea id="q-message" name="Message" placeholder="Précisez vos besoins, disponibilités..."></textarea>
+        </div>
+
+        <div class="wz-recap" data-recap></div>
+
+        <div class="wz-total">
+          <span>Total estimé :</span>
+          <b data-total>—</b>
+        </div>
+        <p class="wz-note">Tarif indicatif — le devis définitif est confirmé par l'équipe selon l'état du véhicule ou du mobilier. Vous ne payez qu'après avoir vérifié le résultat avec nous.</p>
+      </section>
+
+      <!-- ============ NAVIGATION ============ -->
+      <div class="wz-nav">
+        <button type="button" class="btn btn-outline" data-prev disabled>← Retour</button>
+        <button type="button" class="btn btn-primary" data-next disabled>Suivant →</button>
+        <button type="submit" class="btn btn-primary" data-send hidden>Envoyer ma demande</button>
+      </div>
+
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      <p class="form-note">Vous préférez appeler ? <a href="tel:+33627945361" style="color:var(--blue);font-weight:600">06 27 94 53 61</a></p>
+    </form>
+
+    <div class="grid grid-3 reveal" style="margin-top:44px">
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Réponse rapide</h3>
+        <p>On vous rappelle ou vous répond par SMS, en général dans la journée.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💶</div>
+        <h3>Sans engagement</h3>
+        <p>Le devis est gratuit. Vous ne payez qu'après avoir vérifié le résultat avec nous.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📸</div>
+        <h3>Encore plus rapide</h3>
+        <p>Envoyez une photo par SMS au <a href="sms:+33627945361" style="color:var(--blue);font-weight:600">06 27 94 53 61</a> et on vous donne un prix tout de suite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span class="brand-dot"></span> Carsherwash</div>
+        <p>Nettoyage automobile et nettoyage de mobilier à domicile à Rennes et ses alentours. Matériel professionnel, résultat garanti.</p>
+        <div class="socials" style="justify-content:flex-start">
+          <a class="social" href="https://www.instagram.com/carsherwash35" target="_blank" rel="noopener" style="background:transparent;border-color:rgba(255,255,255,.16)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+            @carsherwash35
+          </a>
+          <a class="social" href="https://www.tiktok.com/@carsherwash35" target="_blank" rel="noopener" style="background:transparent;border-color:rgba(255,255,255,.16)">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-2.9v14.1a2.6 2.6 0 1 1-2.6-2.6c.27 0 .53.04.78.12V10.6a5.7 5.7 0 1 0 4.72 5.6V8.9a6.4 6.4 0 0 0 3.9 1.3V7.3a3.6 3.6 0 0 1-3.9-3.3z"/></svg>
+            @carsherwash35
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="auto.html">Nettoyage voiture</a></li>
+          <li><a href="mobilier.html">Nettoyage mobilier</a></li>
+          <li><a href="realisations.html">Réalisations</a></li>
+          <li><a href="contact.html">Contact &amp; FAQ</a></li>
+          <li><a href="devis.html">Devis gratuit</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+33627945361">06 27 94 53 61</a></li>
+          <li><a href="sms:+33627945361">Envoyer un SMS</a></li>
+          <li>Rennes &amp; agglomération</li>
+          <li>7j/7 — 9h à 19h</li>
+          <li><a href="https://g.page/r/CbnB4ZW-7lo3ECE/review" target="_blank" rel="noopener">★ Laisser un avis Google</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span data-year></span> Carsherwash — Nettoyage automobile &amp; mobilier à domicile · Rennes &amp; agglomération</div>
+  </div>
+</footer>
+
+<a class="float-call" href="tel:+33627945361">📞 Appeler</a>
+
+<script src="assets/app.js"></script>
+<script src="assets/devis.js"></script>
+</body>
+</html>

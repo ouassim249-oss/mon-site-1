@@ -1,0 +1,269 @@
+/* ==========================================================================
+   CARSHERWASH — THÈME SOMBRE + FOND ANIMÉ À BULLES
+   Se charge APRÈS style.css. Reprend les couleurs de la marque :
+   navy #0d1b2a, bleu #2d8cf0, DM Sans.
+
+   Pour revenir au thème clair d'origine : retirer la ligne
+   <link rel="stylesheet" href="assets/theme.css"> des pages HTML.
+   ========================================================================== */
+
+:root { color-scheme: dark; }
+
+body {
+  background-color: var(--navy);
+  color: #c2d2e3;
+  /* Lueurs bleues fixes, sous les bulles */
+  background-image:
+    radial-gradient(860px 580px at 12% 3%, rgba(45, 140, 240, .22), transparent 62%),
+    radial-gradient(760px 520px at 90% 26%, rgba(45, 140, 240, .15), transparent 62%),
+    radial-gradient(800px 560px at 45% 96%, rgba(45, 140, 240, .13), transparent 64%);
+  background-attachment: fixed;
+}
+
+/* ==========================================================================
+   FOND ANIMÉ — bulles de mousse
+   Les éléments sont créés par app.js. Trois plans de profondeur qui se
+   décalent à des vitesses différentes quand on fait défiler la page.
+   ========================================================================== */
+.fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.fx-depth {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.fx-depth span {
+  position: absolute;
+  bottom: -14vh;
+  left: var(--left);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: 1px solid rgba(90, 170, 245, .34);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .5), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(45, 140, 240, .14), transparent 68%);
+  will-change: transform, opacity;
+  animation: fxBubble var(--dur) linear infinite;
+  animation-delay: var(--delay);
+}
+@keyframes fxBubble {
+  0%   { transform: translate3d(0, 0, 0) scale(.7); opacity: 0; }
+  12%  { opacity: .9; }
+  85%  { opacity: .55; }
+  100% { transform: translate3d(var(--drift), -132vh, 0) scale(1.1); opacity: 0; }
+}
+
+/* Économie de batterie / confort : on coupe tout le fond animé */
+@media (prefers-reduced-motion: reduce) {
+  .fx { display: none; }
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+.section { background: transparent; }
+.bg-soft {
+  background: rgba(255, 255, 255, .025);
+  border-top: 1px solid rgba(255, 255, 255, .06);
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.bg-navy { background: transparent; }
+
+/* Le hero devient translucide : les bulles traversent aussi le haut de page */
+.hero {
+  background: radial-gradient(900px 480px at 78% 8%, rgba(45, 140, 240, .18), transparent 62%);
+}
+.hero--sub { background: radial-gradient(820px 420px at 76% 10%, rgba(45, 140, 240, .16), transparent 62%); }
+
+.site-header { background: rgba(13, 27, 42, .8); }
+.cta-band {
+  background:
+    radial-gradient(700px 380px at 82% 12%, rgba(45, 140, 240, .22), transparent 62%),
+    rgba(255, 255, 255, .03);
+}
+.site-footer {
+  background: rgba(255, 255, 255, .03);
+  border-top: 1px solid rgba(255, 255, 255, .07);
+}
+
+/* ==========================================================================
+   TEXTE
+   ========================================================================== */
+h1, h2, h3, h4 { color: #fff; }
+
+.lead,
+.card p,
+.note,
+.formule-sub,
+.step p,
+.contact-card p,
+.form-note,
+.ba-hint,
+.review-top span { color: #8fa5bb; }
+
+.eyebrow { color: var(--blue-light); }
+.bg-navy .lead { color: #8fa5bb; }
+.bg-navy .ba-hint { color: #8fa5bb !important; }
+
+/* ==========================================================================
+   CARTES ET BLOCS — verre translucide
+   ========================================================================== */
+.card,
+.formule,
+.review,
+.contact-card,
+.extras,
+.faq-item,
+.form-wrap,
+.wizard,
+.zone-chip,
+.rating-score,
+.review-cta,
+.social {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #c2d2e3;
+}
+
+.card:hover,
+.formule:hover {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(45, 140, 240, .45);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+}
+
+.formule--featured {
+  background: rgba(45, 140, 240, .1);
+  border-color: rgba(45, 140, 240, .55);
+  box-shadow: 0 16px 46px rgba(45, 140, 240, .22);
+}
+
+.formule-price,
+.price-lines b,
+.rating-score b,
+.contact-card a,
+.review-top b { color: #fff; }
+.contact-card a:hover { color: var(--blue-light); }
+
+.price-lines li { border-bottom-color: rgba(255, 255, 255, .1); }
+.features li { color: #b0c2d6; }
+.features li::before { background-color: rgba(45, 140, 240, .22); }
+
+.card-icon { background: rgba(45, 140, 240, .18); }
+
+.extra {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .08);
+  color: #c2d2e3;
+}
+
+.step-num { box-shadow: 0 6px 22px rgba(45, 140, 240, .45); }
+
+.faq-q { color: #fff; }
+.faq-a p { color: #8fa5bb; }
+
+.review p { color: #a4b8cc; }
+
+.zone-chip { color: #c2d2e3; }
+
+/* ==========================================================================
+   BOUTONS
+   ========================================================================== */
+.btn-outline {
+  background: transparent;
+  border-color: rgba(255, 255, 255, .22);
+  color: #fff;
+}
+.btn-outline:hover { border-color: var(--blue-light); color: var(--blue-light); }
+
+/* ==========================================================================
+   COMPARATEUR AVANT / APRÈS
+   ========================================================================== */
+.ba-arrow {
+  background: transparent;
+  border-color: rgba(255, 255, 255, .2);
+  color: #fff;
+}
+.ba-arrow:hover { border-color: #fff; background: rgba(255, 255, 255, .1); }
+.ba-dot { background: rgba(255, 255, 255, .25); }
+.ba-dot.is-active { background: var(--blue-light); }
+.ba-caption strong { color: #fff; }
+.ba-caption span { color: #8fa5bb; }
+
+/* ==========================================================================
+   FORMULAIRE
+   ========================================================================== */
+.form-group label { color: #dbe7f3; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .14);
+  color: #eaf2fa;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: #6f849b; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--blue);
+  background: rgba(255, 255, 255, .09);
+}
+
+/* ==========================================================================
+   DEVIS EN 5 ÉTAPES
+   ========================================================================== */
+.wz-seg { background: rgba(255, 255, 255, .12); }
+.wz-title, .wz-q, .wz-sub { color: #fff; }
+.wz-step, .wz-hint, .wz-note, .wz-empty { color: #8fa5bb; }
+
+.wz-choice {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .12);
+  color: #fff;
+}
+.wz-choice:hover { border-color: var(--blue); background: rgba(255, 255, 255, .09); }
+.wz-choice.is-on { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+.wz-opt {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .12);
+  color: #dbe7f3;
+}
+.wz-opt:hover { border-color: var(--blue); background: rgba(255, 255, 255, .08); }
+.wz-opt.is-on { background: rgba(45, 140, 240, .16); border-color: var(--blue); }
+.wz-box { border-color: rgba(255, 255, 255, .3); }
+.wz-opt-price { color: var(--blue-light); }
+.wz-opt select {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(255, 255, 255, .16);
+  color: #eaf2fa;
+}
+
+/* La liste déroulante est dessinée par le système : sans couleur de fond
+   explicite sur les <option>, on obtient du texte clair sur fond blanc. */
+.wz-opt select option,
+.form-group select option,
+.form-group select optgroup {
+  background-color: #16273a;
+  color: #eaf2fa;
+}
+
+.wz-recap { border-top-color: rgba(255, 255, 255, .12); }
+.wz-line span { color: #a4b8cc; }
+.wz-line b { color: #fff; }
+.wz-total {
+  background: rgba(45, 140, 240, .14);
+  border: 1px solid rgba(45, 140, 240, .3);
+}
+.wz-total span { color: #fff; }
+.wz-total b { color: var(--blue-light); }

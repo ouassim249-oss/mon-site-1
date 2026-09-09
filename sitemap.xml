@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://carsherwash.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://carsherwash.com/auto.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://carsherwash.com/mobilier.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://carsherwash.com/realisations.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://carsherwash.com/contact.html</loc>
+    <priority>0.7</priority>
+  </url>
+</urlset>
