@@ -13,10 +13,12 @@
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!reduceMotion && !document.querySelector('.fx')) {
+    /* Volontairement discret : peu de bulles, petites et lentes. Un fond
+       trop animé attire l'œil au détriment des tarifs et du devis. */
     var plans = [
-      { nombre: 10, taille: [6, 16],  duree: [30, 46], vitesse: 0.05 }, // arrière-plan
-      { nombre: 8,  taille: [14, 28], duree: [22, 34], vitesse: 0.12 }, // plan médian
-      { nombre: 5,  taille: [26, 50], duree: [16, 26], vitesse: 0.22 }  // premier plan
+      { nombre: 7, taille: [5, 12],  duree: [38, 54], vitesse: 0.04 }, // arrière-plan
+      { nombre: 5, taille: [10, 20], duree: [30, 44], vitesse: 0.09 }, // plan médian
+      { nombre: 3, taille: [18, 30], duree: [24, 36], vitesse: 0.16 }  // premier plan
     ];
 
     function entre(min, max) { return min + Math.random() * (max - min); }

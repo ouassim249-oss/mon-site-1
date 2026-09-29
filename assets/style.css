@@ -203,6 +203,21 @@ p  { margin: 0 0 1rem; }
 .hero h1 .accent { color: var(--blue-light); }
 .hero p.lead { color: #b5c6d8; margin: 0 auto 2rem; font-size: 1.1rem; }
 .hero .btn-row { justify-content: center; }
+/* En flux normal plutôt qu'en flex : sinon l'icône se retrouve seule
+   sur sa ligne dès que le texte passe sur deux lignes. */
+.hero-note {
+  margin: 20px auto 0;
+  max-width: 54ch;
+  font-size: .88rem;
+  line-height: 1.55;
+  color: #93a8bf;
+}
+.hero-note .ico {
+  width: 15px; height: 15px;
+  color: #3fbd7e;
+  margin-right: 6px;
+  vertical-align: -2px;
+}
 .hero--sub { padding: 74px 0 62px; }
 .hero--sub h1 { max-width: 20ch; font-size: clamp(1.9rem, 4.4vw, 3.1rem); }
 
@@ -798,6 +813,149 @@ p  { margin: 0 0 1rem; }
 .wz-nav [data-prev] { flex: 0 0 auto; min-width: 132px; }
 .btn[disabled] { opacity: .42; cursor: not-allowed; transform: none !important; box-shadow: none; }
 
+/* ==========================================================================
+   ICÔNES
+   Un jeu de traits fins, dessinés en SVG, à la place des emoji : les emoji
+   changent d'apparence sur chaque appareil et font « page vite faite ».
+   ========================================================================== */
+.ico {
+  width: 20px; height: 20px;
+  flex: none;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -3px;
+}
+.ico-lg { width: 24px; height: 24px; }
+.btn .ico { width: 18px; height: 18px; }
+
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  background: rgba(45, 140, 240, .12);
+  color: var(--blue);
+  border: 1px solid rgba(45, 140, 240, .2);
+  margin-bottom: 18px;
+}
+.card-icon .ico { width: 21px; height: 21px; }
+
+/* ==========================================================================
+   EN-TÊTE DE SECTION — aligné à gauche, plus éditorial que tout centré
+   ========================================================================== */
+.section-head { max-width: 680px; margin-bottom: 44px; }
+.section-head .lead { margin-bottom: 0; }
+.section-head--center { margin-left: auto; margin-right: auto; text-align: center; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  letter-spacing: .13em;
+}
+.eyebrow::before {
+  content: "";
+  width: 22px; height: 1px;
+  background: currentColor;
+  opacity: .55;
+}
+.section-head--center .eyebrow::before { display: none; }
+
+h2 { letter-spacing: -.025em; }
+.lead { max-width: 62ch; }
+
+/* ==========================================================================
+   BANDEAU DE CONFIANCE — les arguments concrets, sous le hero
+   ========================================================================== */
+.trust {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+}
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+  gap: 18px 30px;
+}
+.trust-item { display: flex; align-items: flex-start; gap: 12px; }
+.trust-item .ico { color: var(--blue); margin-top: 2px; }
+.trust-item b { display: block; font-size: .95rem; color: var(--navy); }
+.trust-item span { font-size: .86rem; color: var(--gray); }
+
+/* ==========================================================================
+   APPEL AU DEVIS — le bloc qui doit donner envie de remplir le formulaire
+   ========================================================================== */
+.quote-teaser {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 40px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+.quote-teaser h2 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
+.quote-steps { list-style: none; margin: 22px 0 0; padding: 0; }
+.quote-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 10px 0;
+  font-size: .96rem;
+  color: #40546b;
+}
+.quote-steps .n {
+  width: 24px; height: 24px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(45, 140, 240, .14);
+  color: var(--blue);
+  font-size: .78rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.quote-aside { text-align: center; }
+.quote-price {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.quote-price small { display: block; font-size: .84rem; font-weight: 500; color: var(--gray); letter-spacing: 0; margin-bottom: 6px; }
+.quote-reassure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: center;
+  margin-top: 16px;
+  font-size: .84rem;
+  color: var(--gray);
+}
+.quote-reassure span { display: inline-flex; align-items: center; gap: 6px; }
+.quote-reassure .ico { width: 15px; height: 15px; color: #1a9d5c; }
+
+/* ==========================================================================
+   BARRE D'ACTION MOBILE — appel + devis toujours accessibles
+   ========================================================================== */
+.action-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 85;
+  display: none;
+  gap: 10px;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  background: rgba(13, 27, 42, .94);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255, 255, 255, .1);
+}
+.action-bar .btn { flex: 1; padding: 13px 14px; font-size: .92rem; }
+
 /* ---------- Bandeau image / texte ---------- */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: center; }
 .split h2 { margin-bottom: .6rem; }
@@ -900,7 +1058,12 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .wz-total b { font-size: 1.5rem; }
   .footer-grid { grid-template-columns: 1fr; gap: 28px; }
   .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .float-call { display: inline-flex; }
+  .quote-teaser { grid-template-columns: 1fr; gap: 26px; padding: 26px 20px; }
+  .section-head { margin-bottom: 32px; }
+  /* La barre d'action remplace la pastille flottante : deux choix au lieu d'un */
+  .action-bar { display: flex; }
+  body { padding-bottom: 74px; }
+  .float-call { display: none; }
   .hero { padding: 68px 0 60px; }
   .btn-row .btn { flex: 1 1 100%; }
   .ba-frame { aspect-ratio: 3 / 4; }

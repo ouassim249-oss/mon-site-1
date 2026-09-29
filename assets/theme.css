@@ -12,11 +12,11 @@
 body {
   background-color: var(--navy);
   color: #c2d2e3;
-  /* Lueurs bleues fixes, sous les bulles */
+  /* Lueurs bleues volontairement discrètes : un fond trop lumineux fait
+     « gabarit », alors qu'une teinte sobre laisse le contenu au premier plan. */
   background-image:
-    radial-gradient(860px 580px at 12% 3%, rgba(45, 140, 240, .22), transparent 62%),
-    radial-gradient(760px 520px at 90% 26%, rgba(45, 140, 240, .15), transparent 62%),
-    radial-gradient(800px 560px at 45% 96%, rgba(45, 140, 240, .13), transparent 64%);
+    radial-gradient(900px 600px at 14% 0%, rgba(45, 140, 240, .13), transparent 60%),
+    radial-gradient(800px 560px at 88% 30%, rgba(45, 140, 240, .08), transparent 62%);
   background-attachment: fixed;
 }
 
@@ -55,8 +55,8 @@ body {
 }
 @keyframes fxBubble {
   0%   { transform: translate3d(0, 0, 0) scale(.7); opacity: 0; }
-  12%  { opacity: .9; }
-  85%  { opacity: .55; }
+  14%  { opacity: .42; }
+  85%  { opacity: .24; }
   100% { transform: translate3d(var(--drift), -132vh, 0) scale(1.1); opacity: 0; }
 }
 
@@ -267,3 +267,40 @@ h1, h2, h3, h4 { color: #fff; }
 }
 .wz-total span { color: #fff; }
 .wz-total b { color: var(--blue-light); }
+
+/* ==========================================================================
+   AFFINAGE — icônes, en-têtes, bandeau de confiance, appel au devis
+   ========================================================================== */
+.card-icon {
+  background: rgba(45, 140, 240, .14);
+  border-color: rgba(45, 140, 240, .26);
+  color: var(--blue-light);
+}
+
+.trust {
+  border-top-color: rgba(255, 255, 255, .08);
+  border-bottom-color: rgba(255, 255, 255, .08);
+}
+.trust-item b { color: #fff; }
+.trust-item span { color: #8fa5bb; }
+.trust-item .ico { color: var(--blue-light); }
+
+.quote-teaser {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+}
+.quote-steps li { color: #b0c2d6; }
+.quote-steps .n { background: rgba(45, 140, 240, .2); color: var(--blue-light); }
+.quote-price { color: #fff; }
+.quote-price small { color: #8fa5bb; }
+.quote-reassure { color: #8fa5bb; }
+.quote-reassure .ico { color: #3fbd7e; }
+
+/* Ombres et halos adoucis : moins d'effets, plus de lisibilité */
+.card:hover, .formule:hover { box-shadow: 0 14px 34px rgba(0, 0, 0, .3); }
+.formule--featured { box-shadow: 0 10px 30px rgba(45, 140, 240, .14); }
+.btn-primary { box-shadow: 0 4px 14px rgba(45, 140, 240, .24); }
+.step-num { box-shadow: 0 4px 14px rgba(45, 140, 240, .3); }
