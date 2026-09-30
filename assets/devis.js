@@ -15,8 +15,16 @@
   /* ---------------------------------------------------------------- TARIFS */
   var TARIFS = {
     formules: {
-      sieges:  { nom: 'Formule Sièges',  prix: 40, des: true },
-      premium: { nom: 'Formule Premium', prix: 60, des: false }
+      sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
+      premium: {
+        nom: 'Formule Premium',
+        prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
+        parCategorie: {                 // le tarif Premium dépend du gabarit
+          'Citadine / Berline': 60,
+          'SUV / 4×4': 70,
+          'Van / Monospace': 80
+        }
+      }
     },
     extras: {
       coffre:      { nom: 'Nettoyage coffre',           prix: 10, parVehicule: true },
@@ -74,6 +82,27 @@
   function nbVehicules() { return etat.nb === '4+' ? 4 : parseInt(etat.nb || '1', 10); }
 
   /* -------------------------------------------------------------- CALCUL */
+
+  /* Tarif d'une formule pour un véhicule. Si plusieurs catégories sont cochées,
+     on ne peut pas savoir laquelle va avec quel véhicule : on retient la moins
+     chère et le total s'affiche alors en « dès ». */
+  function prixUnitaire(f) {
+    if (!f.parCategorie) return { prix: f.prix, approx: false, suffixe: '' };
+
+    var connues = etat.categories.filter(function (c) { return f.parCategorie[c] != null; });
+    if (!connues.length) return { prix: f.prix, approx: true, suffixe: '' };
+
+    var prix = connues.map(function (c) { return f.parCategorie[c]; });
+    var mini = Math.min.apply(null, prix);
+    var maxi = Math.max.apply(null, prix);
+
+    return {
+      prix: mini,
+      approx: mini !== maxi,
+      suffixe: connues.length === 1 ? ' — ' + connues[0] : ''
+    };
+  }
+
   function calcul() {
     var lignes = [], total = 0, approx = false;
     var n = nbVehicules();
@@ -88,9 +117,10 @@
 
       etat.formules.forEach(function (id) {
         var f = TARIFS.formules[id];
-        var sous = f.prix * n;
-        if (f.des) approx = true;
-        lignes.push({ label: f.nom + (n > 1 ? ' × ' + etat.nb : ''), prix: sous });
+        var u = prixUnitaire(f);
+        var sous = u.prix * n;
+        if (f.des || u.approx) approx = true;
+        lignes.push({ label: f.nom + u.suffixe + (n > 1 ? ' × ' + etat.nb : ''), prix: sous });
         total += sous;
       });
 
@@ -368,7 +398,7 @@
   var pack = new URLSearchParams(window.location.search).get('pack');
   if (pack) {
     var correspondances = {
-      'Formule Sièges (dès 40€)': { type: 'Voiture', groupe: 'formule', valeur: 'sieges' },
+      'Formule Sièges (40€)': { type: 'Voiture', groupe: 'formule', valeur: 'sieges' },
       'Formule Premium (60€)':    { type: 'Voiture', groupe: 'formule', valeur: 'premium' },
       'Canapé droit':             { type: 'Mobilier', groupe: 'meuble', valeur: 'droit' },
       "Canapé d'angle":           { type: 'Mobilier', groupe: 'meuble', valeur: 'angle' },
