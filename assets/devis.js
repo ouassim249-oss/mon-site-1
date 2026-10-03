@@ -473,6 +473,7 @@
       return l.label + (l.devis ? ' : sur devis' : (l.info ? '' : ' : ' + l.prix + '€'));
     }).join(' | '));
     champCache('Total estimé', texteTotal(r));
+    champCache('Provenance', window.cwProvenance ? window.cwProvenance() : '—');
 
     var original = btnSend.textContent;
     btnSend.disabled = true;
@@ -488,6 +489,7 @@
           statut.textContent = 'Merci ! Votre demande est bien envoyée, on vous recontacte rapidement.';
         }
         btnSend.hidden = true;
+        if (window.cwSuivi) window.cwSuivi('Devis envoyé', { prestation: etat.type || '—' });
         btnPrev.disabled = true;
       })
       .catch(function () {
