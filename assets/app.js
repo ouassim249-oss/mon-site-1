@@ -62,6 +62,30 @@
     deplacerCouches();
   }
 
+  /* ---------- Carrousels au doigt : barre de progression ----------
+     Sur téléphone, les cartes .swipe défilent de côté. La petite barre
+     située juste après indique où l'on en est. Sur ordinateur, les cartes
+     sont en grille et la barre reste cachée par le CSS. */
+  document.querySelectorAll('.swipe').forEach(function (piste) {
+    var barre = piste.nextElementSibling;
+    if (!barre || !barre.classList.contains('swipe-bar')) return;
+    var curseur = barre.querySelector('span');
+
+    function majBarre() {
+      var total = piste.scrollWidth;
+      var visible = piste.clientWidth;
+      if (total <= visible + 2) { barre.style.visibility = 'hidden'; return; }
+      barre.style.visibility = '';
+      var part = visible / total;
+      curseur.style.width = (part * 100) + '%';
+      curseur.style.left = ((piste.scrollLeft / (total - visible)) * (1 - part) * 100) + '%';
+    }
+
+    piste.addEventListener('scroll', majBarre, { passive: true });
+    window.addEventListener('resize', majBarre, { passive: true });
+    majBarre();
+  });
+
   /* ---------- Menu mobile ---------- */
   var toggle = document.querySelector('.nav-toggle');
   var links = document.querySelector('.nav-links');

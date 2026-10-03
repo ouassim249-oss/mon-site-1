@@ -298,6 +298,42 @@ h1, h2, h3, h4 { color: #fff; }
 .quote-price small { color: #8fa5bb; }
 .quote-reassure { color: #8fa5bb; }
 .quote-reassure .ico { color: #3fbd7e; }
+.quote-call { color: var(--blue-light); }
+
+/* Cartes de formules de l'accueil */
+.fcard {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.fcard:hover { background: rgba(255, 255, 255, .08); border-color: rgba(45, 140, 240, .45); box-shadow: 0 14px 34px rgba(0, 0, 0, .3); }
+.fcard--featured { background: rgba(45, 140, 240, .1); border-color: rgba(45, 140, 240, .55); }
+.fcard p { color: #8fa5bb; }
+.fcard-price { color: #fff; }
+.fcard-price small { color: #8fa5bb; }
+.fcard-link { color: var(--blue-light); }
+
+/* Lien « + 14 autres » de la zone */
+.zone-chip--more { color: var(--blue-light); border-color: rgba(90, 170, 245, .45); }
+.zone-chip--more:hover { background: rgba(45, 140, 240, .16); border-color: var(--blue-light); }
+
+/* Barre de progression des carrousels */
+.swipe-bar { background: rgba(255, 255, 255, .12); }
+.swipe-bar span { background: var(--blue-light); }
+
+/* Avis clients */
+.review blockquote { color: #fff; }
+.review figcaption { border-top-color: rgba(255, 255, 255, .1); }
+.review figcaption b { color: #fff; }
+.review figcaption span { color: #8fa5bb; }
+.rating-badge {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .12);
+  color: #a4b8cc;
+}
+.rating-badge b { color: #fff; }
+.rating-badge:hover { border-color: var(--blue-light); }
 
 /* Ombres et halos adoucis : moins d'effets, plus de lisibilité */
 .card:hover, .formule:hover { box-shadow: 0 14px 34px rgba(0, 0, 0, .3); }

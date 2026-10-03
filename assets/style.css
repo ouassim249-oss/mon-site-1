@@ -938,6 +938,17 @@ h2 { letter-spacing: -.025em; }
 }
 .quote-reassure span { display: inline-flex; align-items: center; gap: 6px; }
 .quote-reassure .ico { width: 15px; height: 15px; color: #1a9d5c; }
+.quote-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--blue);
+}
+.quote-call .ico { width: 16px; height: 16px; }
+.quote-call:hover { text-decoration: underline; }
 
 /* ==========================================================================
    BARRE D'ACTION MOBILE — appel + devis toujours accessibles
@@ -955,6 +966,139 @@ h2 { letter-spacing: -.025em; }
   border-top: 1px solid rgba(255, 255, 255, .1);
 }
 .action-bar .btn { flex: 1; padding: 13px 14px; font-size: .92rem; }
+
+/* ==========================================================================
+   AVIS CLIENTS — cartes citation + badge de note Google
+   ========================================================================== */
+.reviews--2 { grid-template-columns: repeat(2, 1fr); max-width: 860px; margin: 0 auto; }
+.review { margin: 0; display: flex; flex-direction: column; gap: 14px; padding: 28px; }
+.review blockquote {
+  margin: 0;
+  flex: 1;
+  font-size: 1.08rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--navy);
+}
+.review figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.review figcaption b { font-size: .95rem; color: var(--navy); }
+.review figcaption span { font-size: .82rem; color: var(--gray); }
+
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: .92rem;
+  color: var(--gray);
+  transition: border-color .16s ease;
+}
+.rating-badge b { font-size: 1.15rem; color: var(--navy); }
+.rating-badge:hover { border-color: var(--blue); }
+
+.review-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
+
+/* ==========================================================================
+   HAUT DE PAGE AVEC PHOTO + CHIFFRES CLÉS
+   ========================================================================== */
+.hero--photo { position: relative; isolation: isolate; }
+.hero--photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Ta vraie photo « après », très assombrie pour que le texte reste lisible */
+  background:
+    linear-gradient(180deg, rgba(13, 27, 42, .62) 0%, rgba(13, 27, 42, .86) 65%, var(--navy) 100%),
+    url("../apres-nettoyage.jpg") center 38% / cover no-repeat;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 560px;
+  margin: 40px auto 0;
+}
+.hero-stat {
+  display: block;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 14px;
+  padding: 14px 8px;
+  text-align: center;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+a.hero-stat:hover { border-color: rgba(90, 170, 245, .5); }
+.hero-stat b { display: block; font-size: 1.6rem; color: #fff; letter-spacing: -.02em; line-height: 1.15; }
+.hero-stat b small { font-size: .85rem; font-weight: 500; color: #93a8bf; letter-spacing: 0; }
+.hero-stat span { font-size: .78rem; color: #93a8bf; }
+
+/* ==========================================================================
+   CARTES DE FORMULES (accueil) — courtes, le détail est sur la page Voiture
+   ========================================================================== */
+.fcards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 370px));
+  justify-content: center;
+  gap: 22px;
+}
+.fcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px 26px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.fcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.fcard--featured { border-color: var(--blue); box-shadow: 0 10px 30px rgba(45, 140, 240, .14); }
+.fcard h3 { margin: 0 0 6px; }
+.fcard p { flex: 1; margin: 0 0 18px; font-size: .95rem; color: var(--gray); }
+.fcard-price {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--navy);
+  margin-bottom: 18px;
+}
+.fcard-price small { font-size: .9rem; font-weight: 500; letter-spacing: 0; color: var(--gray); margin-right: 4px; }
+.fcard-link { display: inline-flex; align-items: center; gap: 6px; font-size: .93rem; font-weight: 700; color: var(--blue); }
+.fcard-link .ico { width: 16px; height: 16px; }
+.fcard-link:hover { text-decoration: underline; }
+
+/* Dans une colonne, le comparateur occupe toute la largeur : sinon il se
+   réduit à la largeur de sa légende (ses photos sont en position absolue) */
+.split .ba { width: 100%; }
+
+/* « + 14 autres » : renvoie vers la liste complète sur la page Contact */
+.zone-chip--more {
+  color: var(--blue);
+  border-color: rgba(45, 140, 240, .45);
+  font-weight: 600;
+  transition: background .16s ease, border-color .16s ease;
+}
+.zone-chip--more:hover { background: rgba(45, 140, 240, .1); border-color: var(--blue); }
+
+/* Liste des communes alignée à gauche quand elle est dans une colonne */
+.zone-list--left { justify-content: flex-start; margin-top: 22px; }
+
+/* Barre de progression des carrousels : visible seulement sur téléphone */
+.swipe-bar { display: none; }
 
 /* ---------- Bandeau image / texte ---------- */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: center; }
@@ -1027,10 +1171,14 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .steps { grid-template-columns: repeat(2, 1fr); }
   .split { grid-template-columns: 1fr; gap: 30px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  /* En deux colonnes, un avis seul sur sa ligne prend toute la largeur */
+  .reviews .review:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 
 @media (max-width: 760px) {
-  .section { padding: 62px 0; }
+  /* Sections un peu plus serrées sur téléphone : moins de vide entre les blocs */
+  .section { padding: 52px 0; }
+  .section--tight { padding: 40px 0; }
   .nav-toggle { display: flex; }
   .nav-links {
     position: absolute;
@@ -1056,9 +1204,84 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .wz-opt { padding: 14px; gap: 11px; }
   .wz-opt-name { font-size: .95rem; }
   .wz-total b { font-size: 1.5rem; }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  /* Pied de page : la présentation en pleine largeur, puis Navigation et
+     Contact côte à côte au lieu de trois blocs empilés */
+  .site-footer { padding: 40px 0 22px; font-size: .88rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px 18px; }
+  .footer-grid > div:first-child { grid-column: 1 / -1; }
+  .site-footer li { margin-bottom: 7px; }
+  .footer-bottom { margin-top: 26px; padding-top: 16px; font-size: .8rem; }
+  .site-footer .socials { gap: 8px; }
+  .site-footer .social { padding: 8px 10px; font-size: .8rem; gap: 6px; }
   .stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .quote-teaser { grid-template-columns: 1fr; gap: 26px; padding: 26px 20px; }
+  /* Carrousels au doigt (formules, comment on travaille, avis) : on fait
+     défiler les cartes de côté au lieu de les empiler. La carte suivante
+     dépasse légèrement pour montrer qu'il y en a d'autres. */
+  .swipe {
+    display: flex !important;
+    /* Sans ce flex-start, des cartes centrées débordent à gauche, hors d'atteinte */
+    justify-content: flex-start !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    margin: 0 -22px;
+    padding: 16px 22px 6px;
+    scroll-padding: 0 22px;
+    scrollbar-width: none;
+  }
+  .swipe::-webkit-scrollbar { display: none; }
+  /* Calage sur le bord gauche : la première carte est toujours entière au départ */
+  .swipe > * { flex: 0 0 84%; scroll-snap-align: start; }
+  .swipe-bar {
+    display: block;
+    position: relative;
+    width: 84px;
+    height: 4px;
+    margin: 14px auto 0;
+    border-radius: 4px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .swipe-bar span {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 50%;
+    border-radius: 4px;
+    background: var(--blue);
+  }
+  .reviews .review { padding: 22px; }
+  .reviews .review:last-child:nth-child(odd) { grid-column: auto; }
+  .fcard { padding: 26px 22px; }
+  .hero-stats { gap: 8px; margin-top: 30px; }
+  .hero-stat { padding: 12px 6px; }
+  .hero-stat b { font-size: 1.35rem; }
+  /* Le bouton d'avis tient sur une ligne : les étoiles sont déjà dans le badge */
+  .review-actions { margin-top: 22px; }
+  .review-actions .review-cta { white-space: nowrap; padding: 12px 22px; }
+  .review-actions .review-cta .stars { display: none; }
+
+  /* Cartes « Comment on travaille » : icône et titre sur la même ligne */
+  .grid-4 { gap: 12px; }
+  .grid-4 .card {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    column-gap: 14px;
+    align-items: center;
+    padding: 20px;
+  }
+  .grid-4 .card .card-icon { margin-bottom: 0; }
+  .grid-4 .card h3 { margin: 0; font-size: 1.05rem; }
+  .grid-4 .card p { grid-column: 1 / -1; margin-top: 10px; }
+
+  /* Formules : moins d'espace perdu dans les cartes */
+  .formule { padding: 28px 22px; }
+  .features { margin: 16px 0 20px; }
+  .features li { margin-bottom: 8px; }
+
+  /* Liste des communes plus compacte : elle ne doit pas occuper tout l'écran */
+  .zone-list { gap: 7px; }
+  .zone-chip { padding: 6px 12px; font-size: .82rem; }
   .section-head { margin-bottom: 32px; }
   /* La barre d'action remplace la pastille flottante : deux choix au lieu d'un */
   .action-bar { display: flex; }
