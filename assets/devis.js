@@ -417,6 +417,9 @@
   }
 
   /* ------------------------------------------------------------- ENVOI */
+  /* Adresse du script Google (Extensions > Apps Script > Déployer). */
+  var GOOGLE_SHEET_URL = '';
+
   function champCache(nom, valeur) {
     var input = form.querySelector('input[type="hidden"][name="' + nom + '"]');
     if (!input) {
@@ -479,6 +482,16 @@
     btnSend.disabled = true;
     btnSend.textContent = 'Envoi en cours...';
     if (statut) { statut.className = 'form-status'; statut.textContent = ''; }
+
+    /* Copie de la demande dans le Google Sheet de Carsherwash (en plus du mail).
+       Envoyée même si le mail échoue, pour ne perdre aucun client. */
+    if (GOOGLE_SHEET_URL && !form.querySelector('[name="botcheck"]:checked')) {
+      var copie = new URLSearchParams();
+      new FormData(form).forEach(function (v, k) {
+        if (k !== 'access_key' && k !== 'botcheck') copie.append(k, v);
+      });
+      fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', body: copie }).catch(function () {});
+    }
 
     fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(form) })
       .then(function (rep) { return rep.json(); })
