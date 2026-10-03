@@ -272,6 +272,52 @@
 
   /* Le formulaire de devis en 5 étapes est géré par assets/devis.js */
 
+  /* ---------- Statistiques (Vercel Web Analytics) ----------
+     Les pages vues et les sites d'origine sont comptés automatiquement par
+     le script Vercel chargé dans chaque page. Ici on ajoute :
+     - la provenance du visiteur, retenue dès sa première page (Google,
+       Facebook, lien ?utm_source=... d'une pub ou d'un flyer, ou "direct")
+       pour la joindre aux demandes de devis ;
+     - un événement à chaque clic sur Appeler ou SMS. */
+  function provenance() {
+    var cle = 'cw-provenance';
+    try {
+      var connue = sessionStorage.getItem(cle);
+      if (connue) return connue;
+    } catch (e) { /* stockage bloqué : on recalcule à chaque page */ }
+
+    var params = new URLSearchParams(location.search);
+    var source = params.get('utm_source');
+    var valeur;
+    if (source) {
+      valeur = source + (params.get('utm_medium') ? ' / ' + params.get('utm_medium') : '')
+        + (params.get('utm_campaign') ? ' / ' + params.get('utm_campaign') : '');
+    } else if (document.referrer && new URL(document.referrer).host !== location.host) {
+      valeur = new URL(document.referrer).host.replace(/^www\./, '');
+    } else {
+      valeur = 'direct';
+    }
+    valeur += ' (arrivée sur ' + (location.pathname.replace(/^\//, '') || 'accueil') + ')';
+    try { sessionStorage.setItem(cle, valeur); } catch (e) {}
+    return valeur;
+  }
+
+  window.cwProvenance = provenance;
+  window.cwSuivi = function (nom, donnees) {
+    if (typeof window.va !== 'function') return;
+    var data = { page: location.pathname || '/', provenance: provenance().slice(0, 250) };
+    for (var k in donnees) data[k] = donnees[k];
+    window.va('event', { name: nom, data: data });
+  };
+
+  provenance();
+
+  document.addEventListener('click', function (e) {
+    var lien = e.target.closest && e.target.closest('a[href^="tel:"], a[href^="sms:"]');
+    if (!lien) return;
+    window.cwSuivi(lien.getAttribute('href').indexOf('tel:') === 0 ? 'Appel' : 'SMS');
+  });
+
   /* ---------- Année automatique dans le pied de page ---------- */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
