@@ -17,6 +17,7 @@ contenu de ce dossier à la racine de votre hébergement, comme votre site actue
 | `assets/theme.css` | Thème sombre + fond animé à bulles |
 | `assets/app.js` | Menu mobile, bulles, comparateur avant/après, FAQ |
 | `assets/devis.js` | Le parcours de devis en 5 étapes et le calcul du total |
+| `api/avis.js` | Va chercher les avis Google à jour pour l'accueil (à ne pas supprimer lors d'un envoi de zip) |
 
 ## Ce qu'il vous reste à faire
 

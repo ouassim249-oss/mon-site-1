@@ -205,20 +205,22 @@
     <div class="section-head section-head--center reveal">
       <span class="eyebrow">Avis clients</span>
       <h2>Ce qu'en disent nos clients</h2>
-      <a class="rating-badge" href="https://g.page/r/CbnB4ZW-7lo3ECE" target="_blank" rel="noopener">
-        <b>5,0</b> <span class="stars" aria-hidden="true">★★★★★</span> <span>3 avis sur Google</span>
+      <a class="rating-badge" data-avis-badge href="https://g.page/r/CbnB4ZW-7lo3ECE" target="_blank" rel="noopener">
+        <b>5,0</b> <span class="stars" aria-hidden="true">★★★★★</span> <span data-avis-nombre>3 avis sur Google</span>
       </a>
     </div>
 
     <!-- ============================================================
-         AVIS GOOGLE — recopiés mot pour mot depuis la fiche Google.
-         Pour en ajouter un : dupliquez un bloc <figure class="review">
+         AVIS GOOGLE — mis à jour tout seuls depuis la fiche Google
+         (voir api/avis.js). Les avis ci-dessous ne servent que de secours,
+         si Google ne répond pas : inutile de les tenir à jour.
+         Pour en ajouter un quand même : dupliquez un bloc <figure class="review">
          et collez le texte EXACT de l'avis. N'inventez ni ne modifiez
          jamais un avis : c'est interdit par Google et par la loi.
          Pensez aussi à mettre à jour la note et le nombre d'avis
          dans le badge juste au-dessus.
          ============================================================ -->
-    <div class="reviews swipe">
+    <div class="reviews swipe" data-avis-google>
       <figure class="review reveal">
         <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
         <blockquote>« Merci beaucoup pour la prestation de nettoyage intérieur, la voiture est ressorti comme neuf. Sa me donne encore plus envie de conduire. Très professionnel je recommande le prix vaut le coup. »</blockquote>
