@@ -9,12 +9,13 @@
 
    Réglages dans Vercel (Settings > Environment Variables) :
      GOOGLE_PLACES_KEY  la clé Google (obligatoire)
-     GOOGLE_PLACE_ID    l'identifiant de la fiche (facultatif : sinon la
-                        fiche est cherchée par son nom, voir RECHERCHE)
+     GOOGLE_PLACE_ID    l'identifiant de la fiche (facultatif : par défaut,
+                        celui de Carsherwash ci-dessous, FICHE)
    Sans clé, le site garde simplement les avis écrits dans index.html.
    ========================================================================== */
 
-var RECHERCHE = 'Carsherwash Rennes';
+/* Fiche Google de Carsherwash (même fiche que g.page/r/CbnB4ZW-7lo3ECE). */
+var FICHE = 'ChIJK4chB00NZwYRucHhlb7uWjc';
 var GOOGLE = 'https://places.googleapis.com/v1/';
 
 async function google(chemin, cle, champs, options) {
@@ -35,15 +36,6 @@ async function google(chemin, cle, champs, options) {
   return donnees;
 }
 
-async function trouverFiche(cle) {
-  if (process.env.GOOGLE_PLACE_ID) return process.env.GOOGLE_PLACE_ID.trim();
-  var resultat = await google('places:searchText', cle, 'places.id', {
-    body: { textQuery: RECHERCHE, languageCode: 'fr', regionCode: 'FR' }
-  });
-  if (!resultat.places || !resultat.places.length) throw new Error('Fiche Google introuvable');
-  return resultat.places[0].id;
-}
-
 /* « Sami Saïdi » devient « Sami S. », comme sur le site. */
 function nomCourt(nom) {
   var mots = String(nom || 'Client').trim().split(/\s+/);
@@ -59,7 +51,7 @@ module.exports = async function (req, res) {
   }
 
   try {
-    var id = await trouverFiche(cle);
+    var id = (process.env.GOOGLE_PLACE_ID || FICHE).trim();
     var fiche = await google(
       'places/' + encodeURIComponent(id) + '?languageCode=fr',
       cle,

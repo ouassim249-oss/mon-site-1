@@ -320,15 +320,15 @@
 
   /* ---------- Avis Google automatiques (accueil) ----------
      Les avis écrits dans index.html s'affichent d'abord. Dès que Google
-     répond (via /api/avis), ils sont remplacés par les avis à jour, avec
-     la vraie note et le vrai nombre d'avis. Si Google ne répond pas,
-     rien ne change. */
+     répond (via /api/avis), la note et le nombre d'avis sont mis à jour,
+     et les avis sont remplacés par ceux de Google quand il en fournit le
+     texte. Si Google ne répond pas, rien ne change. */
   var blocAvis = document.querySelector('[data-avis-google]');
   if (blocAvis && window.fetch) {
     fetch('/api/avis')
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
-        if (!d || !d.ok || !d.avis || !d.avis.length) return;
+        if (!d || !d.ok) return;
 
         var badge = document.querySelector('[data-avis-badge]');
         if (badge && d.note && d.nombre) {
@@ -336,6 +336,10 @@
           badge.querySelector('[data-avis-nombre]').textContent =
             d.nombre + ' avis sur Google';
         }
+
+        /* Google ne fournit pas toujours le texte des avis : dans ce cas,
+           on garde les avis écrits dans index.html. */
+        if (!d.avis || !d.avis.length) return;
 
         var cartes = d.avis.map(function (a) {
           var note = Math.max(1, Math.min(5, Math.round(a.note)));
