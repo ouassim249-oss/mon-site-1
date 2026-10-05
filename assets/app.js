@@ -318,6 +318,66 @@
     window.cwSuivi(lien.getAttribute('href').indexOf('tel:') === 0 ? 'Appel' : 'SMS');
   });
 
+  /* ---------- Avis Google automatiques (accueil) ----------
+     Les avis écrits dans index.html s'affichent d'abord. Dès que Google
+     répond (via /api/avis), la note et le nombre d'avis sont mis à jour,
+     et les avis sont remplacés par ceux de Google quand il en fournit le
+     texte. Si Google ne répond pas, rien ne change. */
+  var blocAvis = document.querySelector('[data-avis-google]');
+  if (blocAvis && window.fetch) {
+    fetch('/api/avis')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.ok) return;
+
+        var badge = document.querySelector('[data-avis-badge]');
+        if (badge && d.note && d.nombre) {
+          badge.querySelector('b').textContent = d.note.toFixed(1).replace('.', ',');
+          badge.querySelector('[data-avis-nombre]').textContent =
+            d.nombre + ' avis sur Google';
+        }
+
+        /* Google ne fournit pas toujours le texte des avis : dans ce cas,
+           on garde les avis écrits dans index.html. */
+        if (!d.avis || !d.avis.length) return;
+
+        var cartes = d.avis.map(function (a) {
+          var note = Math.max(1, Math.min(5, Math.round(a.note)));
+          var fig = document.createElement('figure');
+          fig.className = 'review';
+
+          var etoiles = document.createElement('span');
+          etoiles.className = 'stars';
+          etoiles.setAttribute('role', 'img');
+          etoiles.setAttribute('aria-label', note + ' étoiles sur 5');
+          etoiles.textContent = '★★★★★'.slice(0, note) + '☆☆☆☆☆'.slice(0, 5 - note);
+
+          var citation = document.createElement('blockquote');
+          citation.textContent = '« ' + a.texte + ' »';
+
+          var legende = document.createElement('figcaption');
+          var nom = document.createElement('b');
+          nom.textContent = a.auteur;
+          var info = document.createElement('span');
+          var date = a.date ? new Date(a.date) : null;
+          info.textContent = 'Avis Google' + (date && !isNaN(date)
+            ? ' · ' + date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+            : '');
+          legende.appendChild(nom);
+          legende.appendChild(info);
+
+          fig.appendChild(etoiles);
+          fig.appendChild(citation);
+          fig.appendChild(legende);
+          return fig;
+        });
+
+        blocAvis.innerHTML = '';
+        cartes.forEach(function (c) { blocAvis.appendChild(c); });
+      })
+      .catch(function () {});
+  }
+
   /* ---------- Année automatique dans le pied de page ---------- */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
