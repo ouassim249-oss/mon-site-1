@@ -334,10 +334,14 @@
   }
 
   /* --------------------------------------------------- CENTRAGE À L'ÉCRAN
-     À chaque étape, le formulaire glisse en douceur pour être centré
-     dans la partie visible de l'écran (entre le menu du haut et la barre
-     « Appelez-nous » du bas sur téléphone). S'il est plus grand que
-     l'écran, on aligne son haut juste sous le menu. */
+     À chaque étape, la carte du devis entière (barre d'étapes, question,
+     choix, boutons et « Vous préférez appeler ? ») glisse en douceur dans
+     la partie visible de l'écran, entre le menu du haut et la barre
+     « Appelez-nous » du bas sur téléphone. Elle est centrée, avec au plus
+     MARGE_HAUT pixels d'espace sous le menu sur les grands écrans. Si elle
+     est plus grande que l'écran, son haut s'aligne juste sous le menu. */
+  var MARGE_HAUT = 88;
+
   function hauteurVisible(el) {
     if (!el) return 0;
     var st = window.getComputedStyle(el);
@@ -355,7 +359,7 @@
     var dispo = window.innerHeight - menu - barre;
 
     var cible = (hauteur + 24 <= dispo)
-      ? haut - menu - (dispo - hauteur) / 2
+      ? haut - menu - Math.min((dispo - hauteur) / 2, MARGE_HAUT)
       : haut - menu - 12;
     cible = Math.max(0, Math.round(cible));
 
@@ -555,5 +559,7 @@
   if (!window.location.hash) {
     if (document.readyState === 'complete') setTimeout(centrer, 150);
     else window.addEventListener('load', function () { setTimeout(centrer, 150); });
+    /* Retour sur la page avec le bouton « Précédent » du navigateur */
+    window.addEventListener('pageshow', function (e) { if (e.persisted) setTimeout(centrer, 150); });
   }
 })();
