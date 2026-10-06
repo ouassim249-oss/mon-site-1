@@ -67,6 +67,7 @@
 
   var etape = 1;
   var TOTAL_ETAPES = 5;
+  var pret = false;   // pas de défilement avant la fin du chargement de la page
 
   var segments  = form.querySelectorAll('.wz-seg');
   var panneaux  = form.querySelectorAll('.wz-panel');
@@ -329,9 +330,38 @@
     }
 
     majBoutons();
+    if (pret) centrer();
+  }
 
-    var haut = form.getBoundingClientRect().top + window.pageYOffset - 90;
-    if (window.pageYOffset > haut) window.scrollTo(0, haut);
+  /* --------------------------------------------------- CENTRAGE À L'ÉCRAN
+     À chaque étape, le formulaire glisse en douceur pour être centré
+     dans la partie visible de l'écran (entre le menu du haut et la barre
+     « Appelez-nous » du bas sur téléphone). S'il est plus grand que
+     l'écran, on aligne son haut juste sous le menu. */
+  function hauteurVisible(el) {
+    if (!el) return 0;
+    var st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden') return 0;
+    return el.getBoundingClientRect().height;
+  }
+
+  function centrer() {
+    var haut = 0;
+    for (var el = form; el; el = el.offsetParent) haut += el.offsetTop;   // ignore l'animation d'apparition
+    var hauteur = form.offsetHeight;
+
+    var menu  = hauteurVisible(document.querySelector('.site-header'));
+    var barre = hauteurVisible(document.querySelector('.action-bar'));
+    var dispo = window.innerHeight - menu - barre;
+
+    var cible = (hauteur + 24 <= dispo)
+      ? haut - menu - (dispo - hauteur) / 2
+      : haut - menu - 12;
+    cible = Math.max(0, Math.round(cible));
+
+    if (Math.abs(window.pageYOffset - cible) < 4) return;
+    var doux = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    window.scrollTo({ top: cible, behavior: doux ? 'smooth' : 'auto' });
   }
 
   /* ------------------------------------------------------------- CHOIX 1 */
@@ -518,4 +548,12 @@
   });
 
   afficher(1);
+  pret = true;
+
+  /* À l'arrivée sur la page (bouton « Estimer mon devis »…), la première
+     question s'affiche directement au centre, sans avoir à descendre. */
+  if (!window.location.hash) {
+    if (document.readyState === 'complete') setTimeout(centrer, 150);
+    else window.addEventListener('load', function () { setTimeout(centrer, 150); });
+  }
 })();
