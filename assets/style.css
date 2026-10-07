@@ -399,7 +399,7 @@ p  { margin: 0 0 1rem; }
 }
 .ba-after-wrap {
   position: absolute; inset: 0;
-  clip-path: inset(0 50% 0 0);
+  clip-path: inset(0 0 0 50%);
   will-change: clip-path;
   z-index: 2;
 }
@@ -417,8 +417,8 @@ p  { margin: 0 0 1rem; }
   backdrop-filter: blur(6px);
   pointer-events: none;
 }
-.ba-tag--before { right: 16px; }
-.ba-tag--after { left: 16px; background: rgba(45, 140, 240, .9); }
+.ba-tag--before { left: 16px; }
+.ba-tag--after { right: 16px; background: rgba(45, 140, 240, .9); }
 .ba-handle {
   position: absolute;
   top: 0; bottom: 0;
