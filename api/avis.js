@@ -45,7 +45,7 @@ async function google(chemin, cle, champs, options) {
   return donnees;
 }
 
-/* « Sami Saïdi » devient « Sami S. », comme sur le site. */
+/* « Jean Dupont » devient « Jean D. », comme sur le site. */
 function nomCourt(nom) {
   var mots = String(nom || 'Client').trim().split(/\s+/);
   if (mots.length < 2) return mots[0];
