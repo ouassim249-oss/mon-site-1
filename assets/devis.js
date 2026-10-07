@@ -28,7 +28,7 @@
     },
     extras: {
       coffre:      { nom: 'Nettoyage coffre',           prix: 10, parVehicule: true },
-      deplacement: { nom: 'Déplacement',                prix: 5,  parVehicule: false },
+      deplacement: { nom: 'Déplacement en dehors de Rennes', prix: 5,  parVehicule: false },
       salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true, des: true }
     },
     meubles: {
