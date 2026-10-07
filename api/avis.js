@@ -47,7 +47,10 @@ async function google(chemin, cle, champs, options) {
 
 /* « Jean Dupont » devient « Jean D. », comme sur le site. */
 function nomCourt(nom) {
-  var mots = String(nom || 'Client').trim().split(/\s+/);
+  var mots = String(nom || 'Client').trim().split(/\s+/).map(function (m) {
+    /* « ZINEDDIN » devient « Zineddin » */
+    return /^[A-ZÀ-Ý]{3,}$/.test(m) ? m.charAt(0) + m.slice(1).toLowerCase() : m;
+  });
   if (mots.length < 2) return mots[0];
   return mots[0] + ' ' + mots[mots.length - 1].charAt(0).toUpperCase() + '.';
 }
@@ -107,7 +110,7 @@ async function depuisFeaturable() {
     var avis = d.avis
       .map(function (a) {
         var note = typeof a.note === 'number' ? a.note : etoiles[a.note] || 5;
-        return { auteur: nomCourt(a.nom), note: note, texte: texteOriginal(a.texte), date: a.date || '' };
+        return { auteur: nomCourt(a.nom), note: note, texte: texteOriginal(a.texte).replace(/\s*\n+\s*/g, '. ').replace(/\.\.\s/g, '. '), date: a.date || '' };
       })
       .filter(function (a) { return a.texte; })
       .sort(function (a, b) { return a.date < b.date ? 1 : -1; });
