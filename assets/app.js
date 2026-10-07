@@ -186,7 +186,7 @@
       pct = Math.max(0, Math.min(100, pct));
       slides.forEach(function (s) {
         var wrap = s.querySelector('.ba-after-wrap');
-        if (wrap) wrap.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+        if (wrap) wrap.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
       });
       if (handle) handle.style.left = pct + '%';
     }
