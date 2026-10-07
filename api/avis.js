@@ -24,7 +24,7 @@
 /* Fiche Google de Carsherwash (même fiche que g.page/r/CbnB4ZW-7lo3ECE). */
 var FICHE = 'ChIJK4chB00NZwYRucHhlb7uWjc';
 /* Widget Featurable relié à la fiche Google de Carsherwash. */
-var WIDGET = '';
+var WIDGET = '579bb1e0-4444-41e9-8638-7343e9bf7590';
 var GOOGLE = 'https://places.googleapis.com/v1/';
 
 async function google(chemin, cle, champs, options) {
@@ -47,38 +47,79 @@ async function google(chemin, cle, champs, options) {
 
 /* « Jean Dupont » devient « Jean D. », comme sur le site. */
 function nomCourt(nom) {
-  var mots = String(nom || 'Client').trim().split(/\s+/);
+  var mots = String(nom || 'Client').trim().split(/\s+/).map(function (m) {
+    /* « ZINEDDIN » devient « Zineddin » */
+    return /^[A-ZÀ-Ý]{3,}$/.test(m) ? m.charAt(0) + m.slice(1).toLowerCase() : m;
+  });
   if (mots.length < 2) return mots[0];
   return mots[0] + ' ' + mots[mots.length - 1].charAt(0).toUpperCase() + '.';
 }
 
-/* Featurable : renvoie null si pas de widget ou si ça ne répond pas. */
+/* Featurable donne parfois l'avis suivi de sa traduction par Google
+   (« … (Traduit par Google) … ») : on ne garde que le texte du client. */
+function texteOriginal(texte) {
+  texte = String(texte || '');
+  var original = texte.split(/\(Original\)/i);
+  if (original.length > 1) return original[original.length - 1].trim();
+  return texte.split(/\s*\((?:Traduit par Google|Translated by Google)\)/i)[0].trim();
+}
+
+/* Featurable : renvoie null si pas de widget ou si ça ne répond pas.
+   Les nouveaux widgets répondent sur /v2, les anciens sur /v1. */
 async function depuisFeaturable() {
   var widget = (process.env.FEATURABLE_ID || WIDGET).trim();
   if (!widget) return null;
+  var etoiles = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
   try {
-    var reponse = await fetch('https://api.featurable.com/v1/widgets/' + encodeURIComponent(widget));
-    var d = await reponse.json();
-    if (!reponse.ok || !d || !d.success) throw new Error('réponse ' + reponse.status);
-    var etoiles = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
-    var avis = (d.reviews || [])
+    var d = null;
+    var reponse = await fetch('https://api.featurable.com/v2/widgets/' + encodeURIComponent(widget));
+    var v2 = await reponse.json().catch(function () { return null; });
+    if (reponse.ok && v2 && v2.success && v2.widget) {
+      var resume = v2.widget.gbpLocationSummary || {};
+      d = {
+        note: resume.rating,
+        nombre: resume.reviewsCount,
+        lien: resume.writeAReviewUri,
+        avis: (v2.widget.reviews || []).map(function (a) {
+          return {
+            nom: a.author && a.author.name,
+            note: a.rating && a.rating.value,
+            texte: a.text,
+            date: a.createdAt
+          };
+        })
+      };
+    } else {
+      reponse = await fetch('https://api.featurable.com/v1/widgets/' + encodeURIComponent(widget));
+      var v1 = await reponse.json();
+      if (!reponse.ok || !v1 || !v1.success) throw new Error('réponse ' + reponse.status);
+      d = {
+        note: v1.averageRating,
+        nombre: v1.totalReviewCount,
+        lien: v1.profileUrl,
+        avis: (v1.reviews || []).map(function (a) {
+          return {
+            nom: a.reviewer && a.reviewer.displayName,
+            note: a.starRating,
+            texte: a.comment,
+            date: a.createTime
+          };
+        })
+      };
+    }
+    var avis = d.avis
       .map(function (a) {
-        var note = typeof a.starRating === 'number' ? a.starRating : etoiles[a.starRating] || 5;
-        return {
-          auteur: nomCourt(a.reviewer && a.reviewer.displayName),
-          note: note,
-          texte: String(a.comment || '').replace(/\s*\(Translated by Google\)[\s\S]*$/, '').trim(),
-          date: a.createTime || ''
-        };
+        var note = typeof a.note === 'number' ? a.note : etoiles[a.note] || 5;
+        return { auteur: nomCourt(a.nom), note: note, texte: texteOriginal(a.texte).replace(/\s*\n+\s*/g, '. ').replace(/\.\.\s/g, '. '), date: a.date || '' };
       })
       .filter(function (a) { return a.texte; })
       .sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     return {
       ok: true,
       source: 'featurable',
-      note: Number(d.averageRating) || null,
-      nombre: Number(d.totalReviewCount) || 0,
-      lienFiche: d.profileUrl || '',
+      note: Number(d.note) || null,
+      nombre: Number(d.nombre) || 0,
+      lienFiche: d.lien || '',
       avis: avis
     };
   } catch (e) {
