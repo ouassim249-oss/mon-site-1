@@ -977,6 +977,26 @@ h2 { letter-spacing: -.025em; }
   .reviews--3x { display: flex; flex-wrap: wrap; justify-content: center; }
   .reviews--3x > .review { flex: 0 0 calc((100% - 40px) / 3); }
 }
+
+/* Avis qui défilent tout seuls (assets/app.js) : une seule rangée qui glisse
+   lentement, en pause au survol ou au doigt. Bords estompés. */
+.reviews.reviews--defile {
+  display: flex !important;
+  flex-wrap: nowrap;
+  justify-content: flex-start !important;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: none !important;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.reviews--defile::-webkit-scrollbar { display: none; }
+.reviews.reviews--defile > .review { flex: 0 0 340px; }
+@media (max-width: 760px) {
+  .reviews.reviews--defile { gap: 12px; }
+  .reviews.reviews--defile > .review { flex-basis: 84%; }
+}
 .review { margin: 0; display: flex; flex-direction: column; gap: 14px; padding: 28px; }
 .review blockquote {
   margin: 0;

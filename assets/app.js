@@ -324,6 +324,66 @@
      et les avis sont remplacés par ceux de Google quand il en fournit le
      texte. Si Google ne répond pas, rien ne change. */
   var blocAvis = document.querySelector('[data-avis-google]');
+
+  /* Les avis défilent tout seuls, lentement et en boucle : les cartes sont
+     doublées, et quand la première copie arrive au bord on revient au début
+     sans que ça se voie. Pause au survol, au doigt ou au clavier. Immobile
+     pour les visiteurs qui ont demandé moins d'animations sur leur appareil. */
+  function defilerAvis(bloc) {
+    if (!bloc) return;
+    if (bloc._arreter) bloc._arreter();
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.requestAnimationFrame) return;
+    var cartes = Array.prototype.slice.call(bloc.children);
+    if (cartes.length < 2) return;
+
+    cartes.forEach(function (c) { c.classList.add('visible'); });
+    var copies = cartes.map(function (c) {
+      var copie = c.cloneNode(true);
+      copie.setAttribute('aria-hidden', 'true');
+      bloc.appendChild(copie);
+      return copie;
+    });
+    bloc.classList.add('reviews--defile');
+
+    var vitesse = 32;            // pixels par seconde
+    var actif = true, pause = false, reprise = null, avant = null;
+    var pos = bloc.scrollLeft;
+
+    function boucle(t) {
+      if (!actif) return;
+      var tour = copies[0].offsetLeft - cartes[0].offsetLeft;
+      /* Le visiteur a fait défiler lui-même : on repart de là où il est */
+      if (Math.abs(bloc.scrollLeft - pos) > 2) pos = bloc.scrollLeft;
+      if (avant !== null && !pause && tour > 0) {
+        pos += vitesse * Math.min(t - avant, 100) / 1000;
+        if (pos >= tour) pos -= tour;
+        bloc.scrollLeft = pos;
+      }
+      avant = t;
+      window.requestAnimationFrame(boucle);
+    }
+
+    function arreter() { pause = true; clearTimeout(reprise); }
+    function reprendre(delai) {
+      clearTimeout(reprise);
+      reprise = setTimeout(function () { pos = bloc.scrollLeft; pause = false; }, delai);
+    }
+    bloc.addEventListener('mouseenter', arreter);
+    bloc.addEventListener('mouseleave', function () { reprendre(0); });
+    bloc.addEventListener('touchstart', arreter, { passive: true });
+    bloc.addEventListener('touchend', function () { reprendre(2500); }, { passive: true });
+    bloc.addEventListener('focusin', arreter);
+    bloc.addEventListener('focusout', function () { reprendre(0); });
+
+    bloc._arreter = function () {
+      actif = false;
+      copies.forEach(function (c) { if (c.parentNode === bloc) bloc.removeChild(c); });
+      bloc.classList.remove('reviews--defile');
+    };
+    window.requestAnimationFrame(boucle);
+  }
+  defilerAvis(blocAvis);
   if (blocAvis && window.fetch) {
     fetch('/api/avis')
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -375,8 +435,10 @@
         blocAvis.classList.toggle('reviews--2', cartes.length === 2);
         blocAvis.classList.toggle('reviews--4', cartes.length === 4);
         blocAvis.classList.toggle('reviews--3x', cartes.length >= 5);
+        if (blocAvis._arreter) blocAvis._arreter();
         blocAvis.innerHTML = '';
         cartes.forEach(function (c) { blocAvis.appendChild(c); });
+        defilerAvis(blocAvis);
       })
       .catch(function () {});
   }
