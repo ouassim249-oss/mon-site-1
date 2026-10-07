@@ -373,6 +373,7 @@
         });
 
         blocAvis.classList.toggle('reviews--2', cartes.length === 2);
+        blocAvis.classList.toggle('reviews--4', cartes.length === 4);
         blocAvis.innerHTML = '';
         cartes.forEach(function (c) { blocAvis.appendChild(c); });
       })
