@@ -374,6 +374,7 @@
 
         blocAvis.classList.toggle('reviews--2', cartes.length === 2);
         blocAvis.classList.toggle('reviews--4', cartes.length === 4);
+        blocAvis.classList.toggle('reviews--3x', cartes.length >= 5);
         blocAvis.innerHTML = '';
         cartes.forEach(function (c) { blocAvis.appendChild(c); });
       })

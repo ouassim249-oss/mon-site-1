@@ -972,6 +972,11 @@ h2 { letter-spacing: -.025em; }
    ========================================================================== */
 .reviews--2 { grid-template-columns: repeat(2, 1fr); max-width: 860px; margin: 0 auto; }
 .reviews--4 { grid-template-columns: repeat(4, 1fr); }
+/* 5 avis ou plus : 3 par ligne sur ordinateur, la dernière ligne centrée */
+@media (min-width: 981px) {
+  .reviews--3x { display: flex; flex-wrap: wrap; justify-content: center; }
+  .reviews--3x > .review { flex: 0 0 calc((100% - 40px) / 3); }
+}
 .review { margin: 0; display: flex; flex-direction: column; gap: 14px; padding: 28px; }
 .review blockquote {
   margin: 0;
