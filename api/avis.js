@@ -24,7 +24,7 @@
 /* Fiche Google de Carsherwash (même fiche que g.page/r/CbnB4ZW-7lo3ECE). */
 var FICHE = 'ChIJK4chB00NZwYRucHhlb7uWjc';
 /* Widget Featurable relié à la fiche Google de Carsherwash. */
-var WIDGET = '';
+var WIDGET = '579bb1e0-4444-41e9-8638-7343e9bf7590';
 var GOOGLE = 'https://places.googleapis.com/v1/';
 
 async function google(chemin, cle, champs, options) {
