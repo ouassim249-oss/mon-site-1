@@ -164,22 +164,53 @@
   </div>
 </section>
 
-<!-- ================= AVANT / APRÈS ================= -->
+<!-- ================= ZONE + AVANT / APRÈS ================= -->
+<!-- Zone d'intervention à gauche, comparateur avant/après défilant à droite
+     (l'un sous l'autre sur téléphone). Pour ajouter une réalisation :
+     dupliquez un bloc .ba-slide, sans la classe "is-active". -->
 <section class="section bg-navy" id="resultats">
-  <div class="container">
-    <div class="center reveal">
-      <span class="eyebrow">Nos résultats</span>
-      <h2>Avant / après</h2>
-      <p class="lead">Glissez le curseur pour comparer. Des nettoyages réellement réalisés chez nos clients.</p>
+  <div class="container split">
+    <div class="reveal" id="zone">
+      <span class="eyebrow">Zone d'intervention</span>
+      <h2>À Rennes et dans un rayon de 30 km</h2>
+      <p>On vient à vous, du centre-ville de Rennes jusqu'à 30 km autour. Et voici des nettoyages réellement réalisés chez nos clients.</p>
+      <!-- 5 communes principales ; la liste complète est sur la page Contact -->
+      <div class="zone-list zone-list--left">
+        <span class="zone-chip">Rennes</span>
+        <span class="zone-chip">Cesson-Sévigné</span>
+        <span class="zone-chip">Saint-Grégoire</span>
+        <span class="zone-chip">Bruz</span>
+        <span class="zone-chip">Betton</span>
+        <a class="zone-chip zone-chip--more" href="contact.html#zone">+ 14 autres</a>
+      </div>
+      <div class="btn-row" style="margin-top:26px">
+        <a href="contact.html#zone" class="btn btn-primary">Vérifier ma zone</a>
+      </div>
     </div>
 
-    <div class="ba reveal" data-ba style="margin-top:44px">
+    <div class="ba reveal" data-ba>
       <div class="ba-frame" role="group" aria-label="Comparateur avant après">
         <div class="ba-slide is-active" data-title="Intérieur de véhicule" data-sub="Aspiration, plastiques et sièges traités en profondeur">
           <img class="ba-img" src="avant-nettoyage.jpg" alt="Intérieur du véhicule avant nettoyage" loading="lazy">
           <span class="ba-tag ba-tag--before">AVANT</span>
           <div class="ba-after-wrap">
             <img class="ba-img" src="apres-nettoyage.jpg" alt="Intérieur du véhicule après nettoyage" loading="lazy">
+          </div>
+          <span class="ba-tag ba-tag--after">APRÈS</span>
+        </div>
+        <div class="ba-slide" data-title="Console centrale" data-sub="Poussière, poils et débris retirés, plastiques nettoyés">
+          <img class="ba-img" src="console-avant.jpg" alt="Console centrale avant nettoyage" loading="lazy">
+          <span class="ba-tag ba-tag--before">AVANT</span>
+          <div class="ba-after-wrap">
+            <img class="ba-img" src="console-apres.jpg" alt="Console centrale après nettoyage" loading="lazy">
+          </div>
+          <span class="ba-tag ba-tag--after">APRÈS</span>
+        </div>
+        <div class="ba-slide" data-title="Canapé tissu" data-sub="Taches incrustées et odeurs éliminées">
+          <img class="ba-img" src="canape-avant.jpg" alt="Canapé avant nettoyage" loading="lazy">
+          <span class="ba-tag ba-tag--before">AVANT</span>
+          <div class="ba-after-wrap">
+            <img class="ba-img" src="canape-apres.jpg" alt="Canapé après nettoyage" loading="lazy">
           </div>
           <span class="ba-tag ba-tag--after">APRÈS</span>
         </div>
@@ -194,7 +225,7 @@
         <div class="ba-dots" data-ba-dots></div>
         <button class="ba-arrow" type="button" data-ba-next aria-label="Photo suivante">›</button>
       </div>
-      <p class="ba-hint">Glissez le curseur au centre de la photo pour comparer.</p>
+      <p class="ba-hint" style="color:#8ea3ba">Glissez le curseur pour comparer, flèches pour changer de photo.</p>
     </div>
   </div>
 </section>
@@ -274,26 +305,6 @@
         <strong data-ba-title></strong>
         <span data-ba-sub></span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= ZONE ================= -->
-<section class="section bg-soft" id="zone">
-  <div class="container center">
-    <div class="reveal">
-      <span class="eyebrow">Zone d'intervention</span>
-      <h2>À Rennes et dans un rayon de 30 km</h2>
-      <p class="lead">On vient à vous, jusqu'à 30 km autour.</p>
-    </div>
-    <!-- 5 communes principales ; la liste complète est sur la page Contact -->
-    <div class="zone-list reveal">
-      <span class="zone-chip">Rennes</span>
-      <span class="zone-chip">Cesson-Sévigné</span>
-      <span class="zone-chip">Saint-Grégoire</span>
-      <span class="zone-chip">Bruz</span>
-      <span class="zone-chip">Betton</span>
-      <a class="zone-chip zone-chip--more" href="contact.html#zone">+ 14 autres</a>
     </div>
   </div>
 </section>
