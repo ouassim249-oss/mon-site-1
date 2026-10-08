@@ -18,7 +18,12 @@
       sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
       premium: {
         nom: 'Formule Premium (coffre inclus)',
-        prix: 60                        // même prix quel que soit le véhicule
+        prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
+        parCategorie: {                 // le tarif Premium dépend du gabarit
+          'Citadine / Berline': 60,
+          'SUV / 4×4': 70,
+          'Van / Monospace': 80
+        }
       }
     },
     extras: {
@@ -87,29 +92,25 @@
   /* -------------------------------------------------------------- CALCUL */
 
   /* Tarif d'une formule pour un véhicule. Si plusieurs catégories sont cochées,
-     on ne peut pas savoir laquelle va avec quel véhicule : on retient la moins
-     chère et le total s'affiche alors en « dès ». */
+     on ne peut pas savoir laquelle va avec quel véhicule : on affiche alors
+     une fourchette (« 60€ à 80€ »), jamais de « dès ». */
   function prixUnitaire(f) {
-    if (!f.parCategorie) return { prix: f.prix, approx: false, suffixe: '' };
+    if (!f.parCategorie) return { prix: f.prix, max: f.prix, suffixe: '' };
 
     var connues = etat.categories.filter(function (c) { return f.parCategorie[c] != null; });
-    if (!connues.length) return { prix: f.prix, approx: true, suffixe: '' };
+    if (!connues.length) connues = Object.keys(f.parCategorie);
 
     var prix = connues.map(function (c) { return f.parCategorie[c]; });
-    var mini = Math.min.apply(null, prix);
-    var maxi = Math.max.apply(null, prix);
-
     return {
-      prix: mini,
-      approx: mini !== maxi,
+      prix: Math.min.apply(null, prix),
+      max: Math.max.apply(null, prix),
       suffixe: connues.length === 1 ? ' — ' + connues[0] : ''
     };
   }
 
   function calcul() {
-    var lignes = [], total = 0, approx = false;
+    var lignes = [], total = 0, totalMax = 0;
     var n = nbVehicules();
-    if (etat.nb === '4+') approx = true;
 
     if (auto() && etat.nb) {
       lignes.push({
@@ -121,19 +122,23 @@
       etat.formules.forEach(function (id) {
         var f = TARIFS.formules[id];
         var u = prixUnitaire(f);
-        var sous = u.prix * n;
-        if (f.des || u.approx) approx = true;
-        lignes.push({ label: f.nom + u.suffixe + (n > 1 ? ' × ' + etat.nb : ''), prix: sous });
+        var sous = u.prix * n, sousMax = u.max * n;
+        lignes.push({
+          label: f.nom + u.suffixe + (n > 1 ? ' × ' + etat.nb : ''),
+          prix: sous,
+          texte: sousMax !== sous ? sous + '€ à ' + sousMax + '€' : null
+        });
         total += sous;
+        totalMax += sousMax;
       });
 
       etat.extras.forEach(function (id) {
         var e = TARIFS.extras[id];
         var mult = e.parVehicule ? n : 1;
         var sous = e.prix * mult;
-        if (e.des) approx = true;
         lignes.push({ label: e.nom + (mult > 1 ? ' × ' + mult : ''), prix: sous });
         total += sous;
+        totalMax += sous;
       });
     }
 
@@ -144,9 +149,9 @@
         var taille = etat.tailles[id];
         if (!taille) return;
         var p = m.tailles[taille];
-        if (m.des) approx = true;
         lignes.push({ label: m.nom + ' — ' + taille, prix: p });
         total += p;
+        totalMax += p;
       });
     }
 
@@ -163,16 +168,17 @@
       } else {
         lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
         total += d.prix;
+        totalMax += d.prix;
       }
     }
 
-    return { lignes: lignes, total: total, approx: approx };
+    return { lignes: lignes, total: total, totalMax: totalMax };
   }
 
   function texteTotal(r) {
     var payantes = r.lignes.filter(function (l) { return typeof l.prix === 'number'; });
     if (!payantes.length) return 'Sur devis';
-    return (r.approx ? 'dès ' : '') + r.total + '€';
+    return r.totalMax !== r.total ? r.total + '€ à ' + r.totalMax + '€' : r.total + '€';
   }
 
   /* ------------------------------------------------------- RÉCAPITULATIF */
@@ -204,6 +210,20 @@
     }
 
     if (total) total.textContent = texteTotal(r);
+  }
+
+  /* Prix affiché sur la case Premium : celui de la voiture choisie à
+     l'étape 2 (ou la fourchette si plusieurs catégories sont cochées). */
+  function prixPremium() {
+    var span = form.querySelector('[data-group="formule"] [data-value="premium"]');
+    span = span && span.closest('.wz-opt').querySelector('.wz-opt-price');
+    if (!span) return;
+    var grille = TARIFS.formules.premium.parCategorie;
+    var prix = etat.categories.filter(function (c) { return grille[c] != null; })
+      .map(function (c) { return grille[c]; });
+    if (!prix.length) prix = Object.keys(grille).map(function (c) { return grille[c]; });
+    var mini = Math.min.apply(null, prix), maxi = Math.max.apply(null, prix);
+    span.textContent = mini === maxi ? mini + '€' : mini + '€ à ' + maxi + '€';
   }
 
   /* ------------------------------------------ TAILLES DE MOBILIER (ét. 3) */
@@ -338,7 +358,7 @@
     libEtape.textContent = 'ÉTAPE ' + n + ' / ' + TOTAL_ETAPES;
     libTitre.textContent = titreEtape(n);
 
-    if (n === 3) construireTailles();
+    if (n === 3) { construireTailles(); prixPremium(); }
     if (n === 5) majRecap();
 
     /* On efface un éventuel message d'erreur dès qu'on bouge d'étape */
