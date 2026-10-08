@@ -213,6 +213,20 @@
     if (total) total.textContent = texteTotal(r);
   }
 
+  /* Prix affiché sur la case Premium : celui de la voiture choisie à
+     l'étape 2 (ou la fourchette si plusieurs catégories sont cochées). */
+  function prixPremium() {
+    var span = form.querySelector('[data-group="formule"] [data-value="premium"]');
+    span = span && span.closest('.wz-opt').querySelector('.wz-opt-price');
+    if (!span) return;
+    var grille = TARIFS.formules.premium.parCategorie;
+    var prix = etat.categories.filter(function (c) { return grille[c] != null; })
+      .map(function (c) { return grille[c]; });
+    if (!prix.length) prix = Object.keys(grille).map(function (c) { return grille[c]; });
+    var mini = Math.min.apply(null, prix), maxi = Math.max.apply(null, prix);
+    span.textContent = mini === maxi ? mini + '€' : mini + '€ à ' + maxi + '€';
+  }
+
   /* ------------------------------------------ TAILLES DE MOBILIER (ét. 3) */
   function construireTailles() {
     var boite = form.querySelector('[data-mob-sizes]');
@@ -345,7 +359,7 @@
     libEtape.textContent = 'ÉTAPE ' + n + ' / ' + TOTAL_ETAPES;
     libTitre.textContent = titreEtape(n);
 
-    if (n === 3) construireTailles();
+    if (n === 3) { construireTailles(); prixPremium(); }
     if (n === 5) majRecap();
 
     /* On efface un éventuel message d'erreur dès qu'on bouge d'étape */
