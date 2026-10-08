@@ -443,6 +443,17 @@
       .catch(function () {});
   }
 
+  /* ---------- Zone d'intervention : « + N autres » affiche les autres communes ---------- */
+  document.querySelectorAll('[data-zone-more]').forEach(function (bouton) {
+    var texte = bouton.textContent;
+    bouton.addEventListener('click', function () {
+      var ouvert = bouton.getAttribute('aria-expanded') === 'true';
+      bouton.parentNode.querySelectorAll('[data-zone-extra]').forEach(function (c) { c.hidden = ouvert; });
+      bouton.setAttribute('aria-expanded', ouvert ? 'false' : 'true');
+      bouton.textContent = ouvert ? texte : 'Voir moins';
+    });
+  });
+
   /* ---------- Année automatique dans le pied de page ---------- */
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();

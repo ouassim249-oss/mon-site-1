@@ -20,7 +20,7 @@
   var DEPART = { lon: -1.66, lat: 48.13 };
 
   var ZONES = [
-    { max: 10, prix: 5 },                 // presque tout Rennes
+    { max: 10, prix: 0 },                 // offert (presque tout Rennes)
     { max: 20, prix: 10 },
     { max: 30, prix: 20 },
     { max: 40, prix: 30 },
@@ -35,6 +35,7 @@
     for (var i = 0; i < ZONES.length; i++) {
       if (km <= ZONES[i].max) {
         var z = ZONES[i];
+        if (!z.prix) return { prix: 0, offert: true, texte: 'Offert', resume: 'Déplacement offert' };
         return {
           prix: z.prix,
           texte: '+' + z.prix + '€',
@@ -88,8 +89,8 @@
 
   /* Reconnaît une adresse à Rennes directement dans le texte tapé (code
      postal 35000 / 35200 / 35700, ou « Rennes » à la fin) : sert de repli
-     si le service d'adresses ne répond pas. Prix « dès » le premier palier,
-     car le sud de Rennes est à plus de 10 km par la rocade. */
+     si le service d'adresses ne répond pas : on compte alors le premier
+     palier (offert), qui couvre presque tout Rennes. */
   function deviner(texte) {
     var t = (texte || '').trim();
     var cp = t.match(/\b(35\d{3})\b/);
@@ -102,8 +103,6 @@
     r.commune = 'Rennes';
     r.cp = cp ? cp[1] : '';
     r.devine = true;
-    r.des = true;
-    r.resume = 'Déplacement : dès ' + r.prix + '€';
     return r;
   }
 
@@ -187,7 +186,7 @@
       message('Calcul du déplacement…', 'is-wait');
       calculer(f).then(function (r) {
         if (n !== numero) return;
-        message(r.resume, r.surDevis ? 'is-far' : '');   // jamais les km : ils trahiraient le point de départ
+        message(r.resume, r.surDevis ? 'is-far' : (r.offert ? 'is-free' : ''));   // jamais les km : ils trahiraient le point de départ
         signaler(r);
       });
     }
@@ -212,7 +211,7 @@
       if (texte.length < 3) { propositions = []; afficherListe(); message(''); return; }
       var rennes = deviner(texte);
       if (rennes) {
-        message(rennes.resume + ' (Rennes)', '');
+        message(rennes.resume, rennes.offert ? 'is-free' : '');
         signaler(rennes);
       } else {
         message('Choisissez votre adresse dans la liste pour voir le prix du déplacement.', 'is-wait');

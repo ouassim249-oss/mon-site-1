@@ -1111,8 +1111,11 @@ a.hero-stat:hover { border-color: rgba(90, 170, 245, .5); }
    réduit à la largeur de sa légende (ses photos sont en position absolue) */
 .split .ba { width: 100%; }
 
-/* « + 14 autres » : renvoie vers la liste complète sur la page Contact */
+/* « + N autres » : affiche les autres communes de la zone */
+.zone-chip[hidden] { display: none; }
 .zone-chip--more {
+  font-family: inherit;
+  cursor: pointer;
   color: var(--blue);
   border-color: rgba(45, 140, 240, .45);
   font-weight: 600;
@@ -1353,3 +1356,4 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .calc-depl h3 { margin: 0 0 4px; font-size: 1.05rem; color: var(--navy); }
 .calc-depl > p { margin: 0 0 14px; font-size: .9rem; color: var(--gray); }
 .calc-depl .form-group { margin-bottom: 0; }
+.wz-opt-name small { display: block; font-size: .8rem; font-weight: 500; color: var(--gray); margin-top: 2px; }

@@ -17,7 +17,7 @@
     formules: {
       sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
       premium: {
-        nom: 'Formule Premium',
+        nom: 'Formule Premium (coffre inclus)',
         prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
         parCategorie: {                 // le tarif Premium dépend du gabarit
           'Citadine / Berline': 60,
@@ -27,8 +27,7 @@
       }
     },
     extras: {
-      coffre:      { nom: 'Nettoyage coffre',           prix: 10, parVehicule: true },
-      salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true, des: true }
+      salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true }
     },
     meubles: {
       droit: {
@@ -166,9 +165,10 @@
         lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
       } else if (d.surDevis) {
         lignes.push({ label: 'Déplacement — ' + d.commune, devis: true });
+      } else if (d.offert) {
+        lignes.push({ label: 'Déplacement — ' + d.commune, texte: 'Offert' });
       } else {
         lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
-        if (d.des) approx = true;
         total += d.prix;
       }
     }
@@ -540,7 +540,7 @@
     champCache('Commune', champ('q-adresse').value.trim());
     champCache('Code postal', d ? d.cp : '—');
     champCache('Déplacement', !d ? 'adresse non choisie dans la liste : à calculer'
-      : (d.surDevis ? 'hors zone, sur devis' : d.prix + '€') +
+      : (d.surDevis ? 'hors zone, sur devis' : d.offert ? 'offert' : d.prix + '€') +
         (d.km != null ? ' — environ ' + d.km + ' km de route' : ' — Rennes') + (d.estime ? ' (estimation)' : ''));
     champCache('Provenance', window.cwProvenance ? window.cwProvenance() : '—');
 
