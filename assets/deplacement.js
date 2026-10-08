@@ -39,8 +39,7 @@
           prix: z.prix,
           minimum: z.minimum || 0,
           texte: '+' + z.prix + '€',
-          resume: 'Déplacement : ' + z.prix + '€' +
-                  (z.minimum ? ' (prestations : ' + z.minimum + '€ minimum)' : '')
+          resume: 'Déplacement : ' + z.prix + '€'
         };
       }
     }
