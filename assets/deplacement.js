@@ -189,8 +189,7 @@
       message('Calcul du déplacement…', 'is-wait');
       calculer(f).then(function (r) {
         if (n !== numero) return;
-        message(r.resume + ' — environ ' + r.km + ' km de route' + (r.estime ? ' (estimation)' : ''),
-                r.surDevis ? 'is-far' : '');
+        message(r.resume, r.surDevis ? 'is-far' : '');   // jamais les km : ils trahiraient le point de départ
         signaler(r);
       });
     }

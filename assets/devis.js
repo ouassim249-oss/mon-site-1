@@ -165,13 +165,13 @@
       if (!d) {
         lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
       } else if (d.surDevis) {
-        lignes.push({ label: 'Déplacement — ' + d.commune + ' (' + d.km + ' km)', devis: true });
+        lignes.push({ label: 'Déplacement — ' + d.commune, devis: true });
       } else {
         if (d.minimum && total > 0 && total < d.minimum) {
           lignes.push({ label: 'Complément pour atteindre ' + d.minimum + '€ de prestations (minimum à cette distance)', prix: d.minimum - total });
           total = d.minimum;
         }
-        lignes.push({ label: 'Déplacement — ' + d.commune + (d.km != null ? ' (' + d.km + ' km)' : ''), prix: d.prix });
+        lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
         if (d.des) approx = true;
         total += d.prix;
       }
