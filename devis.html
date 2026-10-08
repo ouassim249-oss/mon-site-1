@@ -159,8 +159,25 @@
       <section class="wz-panel" data-panel="3" data-name="Prestation" hidden>
         <div class="wz-block" data-block="auto">
           <p class="wz-q">Prestation souhaitée</p>
-          <p class="wz-hint">Choisissez une formule pour chaque véhicule avec les boutons + et −.</p>
-          <div data-formules-auto></div>
+          <p class="wz-hint">Sélectionnez une ou plusieurs formules.</p>
+          <div class="wz-opts" data-group="formule">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="sieges">
+              <span class="wz-box"></span><span class="wz-opt-name">Formule Sièges</span><span class="wz-opt-price">40€</span>
+            </label>
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="premium">
+              <span class="wz-box"></span><span class="wz-opt-name">Formule Premium <small>coffre inclus</small></span><span class="wz-opt-price">60€ à 80€</span>
+            </label>
+          </div>
+
+          <p class="wz-sub">Extras (facultatif)</p>
+          <div class="wz-opts" data-group="extra">
+            <label class="wz-opt">
+              <input type="checkbox" class="wz-native" data-value="salissures">
+              <span class="wz-box"></span><span class="wz-opt-name">Poils / sable / moisissure</span><span class="wz-opt-price">+10€</span>
+            </label>
+          </div>
         </div>
 
         <div class="wz-block" data-block="mobilier" hidden>

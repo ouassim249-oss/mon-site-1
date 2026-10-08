@@ -1378,9 +1378,3 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .wz-count-btn:disabled { opacity: .35; cursor: default; }
 .wz-count-btn[data-plus] { background: var(--blue); border-color: var(--blue); color: #fff; }
 .wz-count-val { min-width: 1.4em; text-align: center; font-weight: 700; font-size: 1.1rem; }
-.wz-count-reste { margin: 8px 0 18px; }
-@media (max-width: 480px) {
-  .wz-count { gap: 8px; padding: 12px; }
-  .wz-count-ctl { gap: 6px; }
-  .wz-count-btn { width: 34px; height: 34px; font-size: 1.15rem; }
-}
