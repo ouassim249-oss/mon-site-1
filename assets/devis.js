@@ -35,12 +35,10 @@
       },
       matelas: {
         nom: 'Matelas',
-        des: true,
         tailles: { '1 place': 35, '2 places': 50 }
       },
       chaise: {
         nom: 'Chaises / tabourets',
-        des: true,
         tailles: { '1 chaise': 10, '2 chaises': 20, '3 chaises': 30, '4 chaises': 40, '6 chaises': 60 }
       },
       tapis: { nom: 'Tapis / moquette', surDevis: true }
