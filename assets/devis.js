@@ -84,7 +84,7 @@
   if (champAdresse && window.cwDeplacement) {
     window.cwDeplacement.attacher(champAdresse, {
       resultat: form.querySelector('[data-addr-result]'),
-      change: function (r) { etat.depl = r; majBoutons(); }
+      change: function (r) { etat.depl = r; majBoutons(); if (etape === TOTAL_ETAPES) majRecap(); }
     });
   }
 
@@ -160,7 +160,8 @@
 
     /* Déplacement (voiture et mobilier) */
     if (lignes.length) {
-      var d = etat.depl;
+      var d = etat.depl ||
+        (window.cwDeplacement && champAdresse ? window.cwDeplacement.deviner(champAdresse.value) : null);
       if (!d) {
         lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
       } else if (d.surDevis) {
@@ -540,7 +541,7 @@
     }).join(' | '));
     champCache('Total estimé', texteTotal(r));
     /* Gardent les noms de colonne du Google Sheet (« Commune » reçoit l'adresse complète) */
-    var d = etat.depl;
+    var d = etat.depl || (window.cwDeplacement ? window.cwDeplacement.deviner(champ('q-adresse').value) : null);
     champCache('Commune', champ('q-adresse').value.trim());
     champCache('Code postal', d ? d.cp : '—');
     champCache('Déplacement', !d ? 'adresse non choisie dans la liste : à calculer'

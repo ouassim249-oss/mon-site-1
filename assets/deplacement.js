@@ -91,6 +91,24 @@
     return distanceRoute(c[0], c[1]).then(fin);
   }
 
+  /* Reconnaît une adresse à Rennes directement dans le texte tapé (code
+     postal 35000 / 35200 / 35700, ou « Rennes » à la fin), sans attendre
+     le service d'adresses : dans Rennes, le déplacement est toujours offert. */
+  function deviner(texte) {
+    var t = (texte || '').trim();
+    var cp = t.match(/\b(35\d{3})\b/);
+    var rennes = cp ? /^35(000|200|700)$/.test(cp[1]) : /(^|[\s,])rennes\s*$/i.test(t);
+    if (!rennes) return null;
+    var r = tarif(0, RENNES);
+    r.km = 0;
+    r.estime = true;
+    r.adresse = t;
+    r.commune = 'Rennes';
+    r.cp = cp ? cp[1] : '';
+    r.devine = true;
+    return r;
+  }
+
   function chercher(texte) {
     var url = API + '/geocodage/search?autocomplete=1&limit=5&lat=48.11&lon=-1.68&q=' + encodeURIComponent(texte);
     return fetch(url)
@@ -178,21 +196,39 @@
       });
     }
 
+    /* Adresse tapée sans être choisie dans la liste : on prend la première
+       adresse trouvée (ou on reconnaît Rennes dans le texte). */
+    function resoudre() {
+      if ((choisi && !choisi.devine) || input.value.trim().length < 3) return;
+      var texte = input.value.trim();
+      var n = numero;
+      chercher(texte).then(function (res) {
+        if (n !== numero || (choisi && !choisi.devine)) return;
+        if (res.length) { propositions = res; choisir(0); }
+      }).catch(function () {});
+    }
+
     input.addEventListener('input', function () {
       if (choisi) signaler(null);
       clearTimeout(minuteur);
       var texte = input.value.trim();
       var n = ++numero;
       if (texte.length < 3) { propositions = []; afficherListe(); message(''); return; }
-      message('Choisissez votre adresse dans la liste pour voir le prix du déplacement.', 'is-wait');
+      var rennes = deviner(texte);
+      if (rennes) {
+        message(rennes.resume, 'is-free');
+        signaler(rennes);
+      } else {
+        message('Choisissez votre adresse dans la liste pour voir le prix du déplacement.', 'is-wait');
+      }
       minuteur = setTimeout(function () {
         chercher(texte).then(function (res) {
           if (n !== numero) return;
           propositions = res;
           afficherListe();
-          if (!res.length) message('Adresse introuvable. Vérifiez l’orthographe ou indiquez juste votre commune.', 'is-far');
+          if (!res.length && !choisi) message('Adresse introuvable. Vérifiez l’orthographe ou indiquez juste votre commune.', 'is-far');
         }).catch(function () {
-          if (n !== numero) return;
+          if (n !== numero || choisi) return;
           message('Calcul indisponible pour le moment : on vous confirmera le prix du déplacement.', 'is-wait');
         });
       }, 250);
@@ -210,7 +246,7 @@
       else if (e.key === 'Escape') fermer();
     });
 
-    input.addEventListener('blur', function () { setTimeout(fermer, 120); });
+    input.addEventListener('blur', function () { setTimeout(fermer, 120); resoudre(); });
 
     /* Sur téléphone, le champ remonte en haut de l'écran pour que la liste
        des adresses reste visible au-dessus du clavier. */
@@ -220,10 +256,10 @@
       setTimeout(function () { input.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 250);
     });
 
-    return { resultat: function () { return choisi; } };
+    return { resultat: function () { return choisi; }, resoudre: resoudre };
   }
 
-  window.cwDeplacement = { attacher: attacher, tarif: tarif, ZONES: ZONES, MAX_KM: MAX_KM };
+  window.cwDeplacement = { attacher: attacher, tarif: tarif, deviner: deviner, ZONES: ZONES, MAX_KM: MAX_KM };
 
   /* Calculateur autonome (page Contact) : <input data-calc-deplacement> */
   document.querySelectorAll('[data-calc-deplacement]').forEach(function (input) {
