@@ -56,8 +56,9 @@
     nb: null,          // nombre total de véhicules (texte), null si aucun
     categories: [],    // types ayant au moins un véhicule
     compte: {},        // { 'SUV / 4×4': 1, 'Van / Monospace': 1, ... }
-    formules: [],
+    formules: [],      // formules choisies (au moins un véhicule)
     extras: [],
+    choix: {},         // { 'SUV / 4×4': { sieges: 0, premium: 1, salissures: 0 }, ... }
     meubles: [],
     tailles: {},       // { droit: '3 places', ... }
     depl: null         // prix du déplacement calculé depuis l'adresse (assets/deplacement.js)
@@ -97,14 +98,38 @@
 
   /* -------------------------------------------------------------- CALCUL */
 
-  /* Prix d'une formule pour tous les véhicules : chaque véhicule paie le
-     tarif de son type (ex. 1 SUV + 1 van en Premium = 70 + 80 = 150€). */
-  function prixFormule(f) {
-    if (!f.parCategorie) return f.prix * nbVehicules();
-    return etat.categories.reduce(function (somme, c) {
-      var p = f.parCategorie[c] != null ? f.parCategorie[c] : f.prix;
-      return somme + p * etat.compte[c];
-    }, 0);
+  /* Prix d'une formule pour un véhicule d'un type donné (Premium : 60, 70
+     ou 80€ selon le gabarit). */
+  function prixFormule(f, cat) {
+    return f.parCategorie && f.parCategorie[cat] != null ? f.parCategorie[cat] : f.prix;
+  }
+
+  function choixDe(cat) {
+    if (!etat.choix[cat]) etat.choix[cat] = { sieges: 0, premium: 0, salissures: 0 };
+    return etat.choix[cat];
+  }
+
+  /* Recalcule les listes de formules / extras choisies (mail, validation) */
+  function majListesAuto() {
+    etat.formules = Object.keys(TARIFS.formules).filter(function (id) {
+      return etat.categories.some(function (c) { return choixDe(c)[id] > 0; });
+    });
+    etat.extras = Object.keys(TARIFS.extras).filter(function (id) {
+      return etat.categories.some(function (c) { return choixDe(c)[id] > 0; });
+    });
+  }
+
+  /* « SUV / 4×4 : 1 Premium | Van / Monospace : 1 Sièges + poils » */
+  function detailFormules() {
+    return etat.categories.map(function (c) {
+      var ch = choixDe(c);
+      var parts = Object.keys(TARIFS.formules).filter(function (id) { return ch[id]; })
+        .map(function (id) { return ch[id] + ' ' + TARIFS.formules[id].nom; });
+      Object.keys(TARIFS.extras).forEach(function (id) {
+        if (ch[id]) parts.push(ch[id] + ' avec ' + TARIFS.extras[id].nom.toLowerCase());
+      });
+      return c + ' : ' + (parts.join(', ') || '—');
+    }).join(' | ');
   }
 
   function calcul() {
@@ -117,18 +142,25 @@
         info: true
       });
 
-      etat.formules.forEach(function (id) {
-        var f = TARIFS.formules[id];
-        var sous = prixFormule(f);
-        lignes.push({ label: f.nom + (n > 1 ? ' × ' + n : ''), prix: sous });
-        total += sous;
+      /* Une ligne par formule et par type de véhicule */
+      etat.categories.forEach(function (c) {
+        var ch = choixDe(c);
+        Object.keys(TARIFS.formules).forEach(function (id) {
+          var k = ch[id];
+          if (!k) return;
+          var f = TARIFS.formules[id];
+          var sous = prixFormule(f, c) * k;
+          lignes.push({ label: f.nom + ' — ' + c + (k > 1 ? ' × ' + k : ''), prix: sous });
+          total += sous;
+        });
       });
 
-      etat.extras.forEach(function (id) {
+      Object.keys(TARIFS.extras).forEach(function (id) {
+        var k = etat.categories.reduce(function (s, c) { return s + (choixDe(c)[id] || 0); }, 0);
+        if (!k) return;
         var e = TARIFS.extras[id];
-        var mult = e.parVehicule ? n : 1;
-        var sous = e.prix * mult;
-        lignes.push({ label: e.nom + (mult > 1 ? ' × ' + mult : ''), prix: sous });
+        var sous = e.prix * k;
+        lignes.push({ label: e.nom + (k > 1 ? ' × ' + k : ''), prix: sous });
         total += sous;
       });
     }
@@ -201,14 +233,107 @@
     if (total) total.textContent = texteTotal(r);
   }
 
-  /* Prix affiché sur les cases des formules : le prix exact pour les
-     véhicules choisis à l'étape 2. */
-  function prixFormulesAffiches() {
-    Object.keys(TARIFS.formules).forEach(function (id) {
-      var input = form.querySelector('[data-group="formule"] [data-value="' + id + '"]');
-      var span = input && input.closest('.wz-opt').querySelector('.wz-opt-price');
-      if (span && nbVehicules()) span.textContent = prixFormule(TARIFS.formules[id]) + '€';
+  /* --------------------------------------- FORMULES PAR VÉHICULE (ét. 3)
+     Pour chaque type de véhicule choisi à l'étape 2 : combien en Sièges,
+     combien en Premium, combien avec poils / sable / moisissure. */
+  var formulePack = null;    // formule pré-choisie depuis un bouton « Réserver »
+
+  function compteur(nom, sousTitre, prix, valeur, peutAjouter, change) {
+    var ligne = document.createElement('div');
+    ligne.className = 'wz-opt wz-count' + (valeur ? ' is-on' : '');
+
+    var n = document.createElement('span');
+    n.className = 'wz-opt-name';
+    n.textContent = nom;
+    if (sousTitre) {
+      var small = document.createElement('small');
+      small.textContent = sousTitre;
+      n.appendChild(small);
+    }
+    var p = document.createElement('span');
+    p.className = 'wz-opt-price';
+    p.textContent = prix;
+
+    var ctl = document.createElement('div');
+    ctl.className = 'wz-count-ctl';
+    var moins = document.createElement('button');
+    moins.type = 'button'; moins.className = 'wz-count-btn'; moins.setAttribute('data-moins', '');
+    moins.textContent = '−'; moins.setAttribute('aria-label', 'Retirer — ' + nom);
+    moins.disabled = !valeur;
+    var val = document.createElement('output');
+    val.className = 'wz-count-val';
+    val.textContent = valeur;
+    var plus = document.createElement('button');
+    plus.type = 'button'; plus.className = 'wz-count-btn'; plus.setAttribute('data-plus', '');
+    plus.textContent = '+'; plus.setAttribute('aria-label', 'Ajouter — ' + nom);
+    plus.disabled = !peutAjouter;
+    moins.addEventListener('click', function () { change(-1); });
+    plus.addEventListener('click', function () { change(1); });
+    ctl.appendChild(moins); ctl.appendChild(val); ctl.appendChild(plus);
+
+    ligne.appendChild(n);
+    ligne.appendChild(p);
+    ligne.appendChild(ctl);
+    return ligne;
+  }
+
+  function construireFormules() {
+    var boite = form.querySelector('[data-formules-auto]');
+    if (!boite) return;
+    boite.innerHTML = '';
+
+    etat.categories.forEach(function (c) {
+      var nb = etat.compte[c];
+      var ch = choixDe(c);
+      /* Le nombre de véhicules a pu baisser à l'étape 2 */
+      ['premium', 'sieges', 'salissures'].forEach(function (id) {
+        var autres = id === 'salissures' ? 0 : (id === 'premium' ? ch.sieges : ch.premium);
+        ch[id] = Math.max(0, Math.min(ch[id], nb - autres));
+      });
+      if (formulePack && !ch.sieges && !ch.premium) ch[formulePack] = nb;
+      var places = nb - ch.sieges - ch.premium;
+
+      var titre = document.createElement('p');
+      titre.className = 'wz-sub';
+      titre.textContent = nb + ' ' + c;
+      boite.appendChild(titre);
+
+      var reste = document.createElement('p');
+      reste.className = 'wz-hint wz-count-reste' + (places ? '' : ' is-ok');
+      reste.textContent = places
+        ? 'Choisissez une formule pour ' + (places === nb ? (nb > 1 ? 'chaque véhicule' : 'ce véhicule') : 'encore ' + places + ' véhicule' + (places > 1 ? 's' : '')) + '.'
+        : (nb > 1 ? 'Chaque véhicule a sa formule.' : 'Formule choisie.');
+
+      var groupe = document.createElement('div');
+      groupe.className = 'wz-opts';
+      Object.keys(TARIFS.formules).forEach(function (id) {
+        var f = TARIFS.formules[id];
+        groupe.appendChild(compteur(
+          id === 'premium' ? 'Formule Premium' : f.nom,
+          id === 'premium' ? 'coffre inclus' : '',
+          prixFormule(f, c) + '€',
+          ch[id], places > 0,
+          function (d) { ch[id] = Math.max(0, ch[id] + d); apresChoix(); }
+        ));
+      });
+      Object.keys(TARIFS.extras).forEach(function (id) {
+        var e = TARIFS.extras[id];
+        groupe.appendChild(compteur(
+          e.nom, 'en option', '+' + e.prix + '€',
+          ch[id], ch[id] < nb,
+          function (d) { ch[id] = Math.max(0, ch[id] + d); apresChoix(); }
+        ));
+      });
+      boite.appendChild(groupe);
+      boite.appendChild(reste);
     });
+    majListesAuto();
+  }
+
+  function apresChoix() {
+    formulePack = null;
+    construireFormules();
+    majBoutons();
   }
 
   /* ------------------------------------------ TAILLES DE MOBILIER (ét. 3) */
@@ -287,7 +412,13 @@
     }
 
     if (n === 3) {
-      if (auto() && !etat.formules.length) return false;
+      if (auto()) {
+        var incomplet = !etat.categories.length || etat.categories.some(function (c) {
+          var ch = choixDe(c);
+          return ch.sieges + ch.premium !== etat.compte[c];
+        });
+        if (incomplet) return false;
+      }
       if (mob()) {
         var manquante = etat.meubles.some(function (id) {
           return !TARIFS.meubles[id].surDevis && !etat.tailles[id];
@@ -343,7 +474,7 @@
     libEtape.textContent = 'ÉTAPE ' + n + ' / ' + TOTAL_ETAPES;
     libTitre.textContent = titreEtape(n);
 
-    if (n === 3) { construireTailles(); prixFormulesAffiches(); }
+    if (n === 3) { construireTailles(); construireFormules(); }
     if (n === 5) majRecap();
 
     /* On efface un éventuel message d'erreur dès qu'on bouge d'étape */
@@ -439,7 +570,7 @@
   if (compteurs.length) majCompteurs();
 
   /* ------------------------------------------------------- CASES À COCHER */
-  var groupes = { formule: 'formules', extra: 'extras', meuble: 'meubles' };
+  var groupes = { meuble: 'meubles' };
 
   Object.keys(groupes).forEach(function (nomGroupe) {
     var cle = groupes[nomGroupe];
@@ -489,8 +620,8 @@
   var pack = new URLSearchParams(window.location.search).get('pack');
   if (pack) {
     var correspondances = {
-      'Formule Sièges (40€)': { type: 'Voiture', groupe: 'formule', valeur: 'sieges' },
-      'Formule Premium (60€)':    { type: 'Voiture', groupe: 'formule', valeur: 'premium' },
+      'Formule Sièges (40€)':     { type: 'Voiture', formule: 'sieges' },
+      'Formule Premium (60€)':    { type: 'Voiture', formule: 'premium' },
       'Canapé droit':             { type: 'Mobilier', groupe: 'meuble', valeur: 'droit' },
       "Canapé d'angle":           { type: 'Mobilier', groupe: 'meuble', valeur: 'angle' },
       'Autres textiles (matelas, chaises, tapis)': { type: 'Mobilier' },
@@ -500,6 +631,7 @@
     if (m) {
       var bouton = form.querySelector('[data-choice="type"] [data-value="' + m.type + '"]');
       if (bouton) bouton.click();
+      if (m.formule) formulePack = m.formule;
       if (m.groupe) {
         var input = form.querySelector('[data-group="' + m.groupe + '"] [data-value="' + m.valeur + '"]');
         if (input) { input.checked = true; input.dispatchEvent(new Event('change')); }
@@ -551,9 +683,7 @@
     champCache('Véhicules', auto()
       ? (detailVehicules() || '—')
       : '—');
-    champCache('Formules voiture', auto()
-      ? (etat.formules.map(function (id) { return TARIFS.formules[id].nom; }).join(', ') || '—')
-      : '—');
+    champCache('Formules voiture', auto() ? (detailFormules() || '—') : '—');
     champCache('Extras', auto()
       ? (etat.extras.map(function (id) { return TARIFS.extras[id].nom; }).join(', ') || 'aucun')
       : '—');
