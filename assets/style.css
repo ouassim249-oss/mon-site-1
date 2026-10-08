@@ -1357,3 +1357,24 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .calc-depl > p { margin: 0 0 14px; font-size: .9rem; color: var(--gray); }
 .calc-depl .form-group { margin-bottom: 0; }
 .wz-opt-name small { display: block; font-size: .8rem; font-weight: 500; color: var(--gray); margin-top: 2px; }
+
+/* Compteurs de véhicules par type (réservation, étape 2) */
+.wz-count { cursor: default; }
+.wz-count-ctl { display: flex; align-items: center; gap: 10px; }
+.wz-count-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all .16s ease;
+}
+.wz-count-btn:hover { border-color: var(--blue); }
+.wz-count-btn:disabled { opacity: .35; cursor: default; }
+.wz-count-btn[data-plus] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.wz-count-val { min-width: 1.4em; text-align: center; font-weight: 700; font-size: 1.1rem; }

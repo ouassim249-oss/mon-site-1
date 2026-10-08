@@ -365,3 +365,11 @@ h1, h2, h3, h4 { color: #fff; }
 .calc-depl h3 { color: #fff; }
 .calc-depl > p { color: #8fa5bb; }
 .wz-opt-name small { color: #8fa5bb; }
+
+.wz-count-btn {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(255, 255, 255, .2);
+  color: #fff;
+}
+.wz-count-btn[data-plus] { background: var(--blue); border-color: var(--blue); }
+.wz-count-val { color: #fff; }

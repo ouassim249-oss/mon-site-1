@@ -18,7 +18,12 @@
       sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
       premium: {
         nom: 'Formule Premium (coffre inclus)',
-        prix: 60                        // même prix quel que soit le véhicule
+        prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
+        parCategorie: {                 // le tarif Premium dépend du gabarit
+          'Citadine / Berline': 60,
+          'SUV / 4×4': 70,
+          'Van / Monospace': 80
+        }
       }
     },
     extras: {
@@ -48,8 +53,9 @@
   /* ----------------------------------------------------------------- ÉTAT */
   var etat = {
     type: null,        // 'Voiture' | 'Mobilier' | 'Les deux'
-    nb: null,          // '1' | '2' | '3' | '4+'
-    categories: [],
+    nb: null,          // nombre total de véhicules (texte), null si aucun
+    categories: [],    // types ayant au moins un véhicule
+    compte: {},        // { 'SUV / 4×4': 1, 'Van / Monospace': 1, ... }
     formules: [],
     extras: [],
     meubles: [],
@@ -82,48 +88,39 @@
 
   function auto() { return etat.type === 'Voiture' || etat.type === 'Les deux'; }
   function mob()  { return etat.type === 'Mobilier' || etat.type === 'Les deux'; }
-  function nbVehicules() { return etat.nb === '4+' ? 4 : parseInt(etat.nb || '1', 10); }
+  function nbVehicules() { return parseInt(etat.nb || '0', 10); }
+
+  /* « 1 SUV / 4×4, 1 Van / Monospace » */
+  function detailVehicules() {
+    return etat.categories.map(function (c) { return etat.compte[c] + ' ' + c; }).join(', ');
+  }
 
   /* -------------------------------------------------------------- CALCUL */
 
-  /* Tarif d'une formule pour un véhicule. Si plusieurs catégories sont cochées,
-     on ne peut pas savoir laquelle va avec quel véhicule : on retient la moins
-     chère et le total s'affiche alors en « dès ». */
-  function prixUnitaire(f) {
-    if (!f.parCategorie) return { prix: f.prix, approx: false, suffixe: '' };
-
-    var connues = etat.categories.filter(function (c) { return f.parCategorie[c] != null; });
-    if (!connues.length) return { prix: f.prix, approx: true, suffixe: '' };
-
-    var prix = connues.map(function (c) { return f.parCategorie[c]; });
-    var mini = Math.min.apply(null, prix);
-    var maxi = Math.max.apply(null, prix);
-
-    return {
-      prix: mini,
-      approx: mini !== maxi,
-      suffixe: connues.length === 1 ? ' — ' + connues[0] : ''
-    };
+  /* Prix d'une formule pour tous les véhicules : chaque véhicule paie le
+     tarif de son type (ex. 1 SUV + 1 van en Premium = 70 + 80 = 150€). */
+  function prixFormule(f) {
+    if (!f.parCategorie) return f.prix * nbVehicules();
+    return etat.categories.reduce(function (somme, c) {
+      var p = f.parCategorie[c] != null ? f.parCategorie[c] : f.prix;
+      return somme + p * etat.compte[c];
+    }, 0);
   }
 
   function calcul() {
-    var lignes = [], total = 0, approx = false;
+    var lignes = [], total = 0;
     var n = nbVehicules();
-    if (etat.nb === '4+') approx = true;
 
     if (auto() && etat.nb) {
       lignes.push({
-        label: etat.nb + (etat.nb === '1' ? ' véhicule' : ' véhicules') +
-               (etat.categories.length ? ' — ' + etat.categories.join(', ') : ''),
+        label: n + (n === 1 ? ' véhicule' : ' véhicules') + ' — ' + detailVehicules(),
         info: true
       });
 
       etat.formules.forEach(function (id) {
         var f = TARIFS.formules[id];
-        var u = prixUnitaire(f);
-        var sous = u.prix * n;
-        if (f.des || u.approx) approx = true;
-        lignes.push({ label: f.nom + u.suffixe + (n > 1 ? ' × ' + etat.nb : ''), prix: sous });
+        var sous = prixFormule(f);
+        lignes.push({ label: f.nom + (n > 1 ? ' × ' + n : ''), prix: sous });
         total += sous;
       });
 
@@ -131,7 +128,6 @@
         var e = TARIFS.extras[id];
         var mult = e.parVehicule ? n : 1;
         var sous = e.prix * mult;
-        if (e.des) approx = true;
         lignes.push({ label: e.nom + (mult > 1 ? ' × ' + mult : ''), prix: sous });
         total += sous;
       });
@@ -144,7 +140,6 @@
         var taille = etat.tailles[id];
         if (!taille) return;
         var p = m.tailles[taille];
-        if (m.des) approx = true;
         lignes.push({ label: m.nom + ' — ' + taille, prix: p });
         total += p;
       });
@@ -166,13 +161,13 @@
       }
     }
 
-    return { lignes: lignes, total: total, approx: approx };
+    return { lignes: lignes, total: total };
   }
 
   function texteTotal(r) {
     var payantes = r.lignes.filter(function (l) { return typeof l.prix === 'number'; });
     if (!payantes.length) return 'Sur devis';
-    return (r.approx ? 'dès ' : '') + r.total + '€';
+    return r.total + '€';
   }
 
   /* ------------------------------------------------------- RÉCAPITULATIF */
@@ -204,6 +199,16 @@
     }
 
     if (total) total.textContent = texteTotal(r);
+  }
+
+  /* Prix affiché sur les cases des formules : le prix exact pour les
+     véhicules choisis à l'étape 2. */
+  function prixFormulesAffiches() {
+    Object.keys(TARIFS.formules).forEach(function (id) {
+      var input = form.querySelector('[data-group="formule"] [data-value="' + id + '"]');
+      var span = input && input.closest('.wz-opt').querySelector('.wz-opt-price');
+      if (span && nbVehicules()) span.textContent = prixFormule(TARIFS.formules[id]) + '€';
+    });
   }
 
   /* ------------------------------------------ TAILLES DE MOBILIER (ét. 3) */
@@ -276,7 +281,7 @@
     if (n === 1) return !!etat.type;
 
     if (n === 2) {
-      if (auto() && (!etat.nb || !etat.categories.length)) return false;
+      if (auto() && !nbVehicules()) return false;
       if (mob() && !etat.meubles.length) return false;
       return true;
     }
@@ -338,7 +343,7 @@
     libEtape.textContent = 'ÉTAPE ' + n + ' / ' + TOTAL_ETAPES;
     libTitre.textContent = titreEtape(n);
 
-    if (n === 3) construireTailles();
+    if (n === 3) { construireTailles(); prixFormulesAffiches(); }
     if (n === 5) majRecap();
 
     /* On efface un éventuel message d'erreur dès qu'on bouge d'étape */
@@ -399,8 +404,42 @@
     });
   });
 
+  /* ------------------------------------------- VÉHICULES PAR TYPE (ét. 2) */
+  var MAX_PAR_TYPE = 10;
+  var compteurs = form.querySelectorAll('[data-compteurs] [data-cat]');
+
+  function majCompteurs() {
+    var total = 0;
+    etat.categories = [];
+    compteurs.forEach(function (ligne) {
+      var cat = ligne.getAttribute('data-cat');
+      var n = etat.compte[cat] || 0;
+      total += n;
+      if (n) etat.categories.push(cat);
+      ligne.querySelector('.wz-count-val').textContent = n;
+      ligne.querySelector('[data-moins]').disabled = n === 0;
+      ligne.querySelector('[data-plus]').disabled = n >= MAX_PAR_TYPE;
+      ligne.classList.toggle('is-on', n > 0);
+    });
+    etat.nb = total ? String(total) : null;
+    majBoutons();
+  }
+
+  compteurs.forEach(function (ligne) {
+    var cat = ligne.getAttribute('data-cat');
+    ligne.querySelector('[data-plus]').addEventListener('click', function () {
+      etat.compte[cat] = Math.min((etat.compte[cat] || 0) + 1, MAX_PAR_TYPE);
+      majCompteurs();
+    });
+    ligne.querySelector('[data-moins]').addEventListener('click', function () {
+      etat.compte[cat] = Math.max((etat.compte[cat] || 0) - 1, 0);
+      majCompteurs();
+    });
+  });
+  if (compteurs.length) majCompteurs();
+
   /* ------------------------------------------------------- CASES À COCHER */
-  var groupes = { categorie: 'categories', formule: 'formules', extra: 'extras', meuble: 'meubles' };
+  var groupes = { formule: 'formules', extra: 'extras', meuble: 'meubles' };
 
   Object.keys(groupes).forEach(function (nomGroupe) {
     var cle = groupes[nomGroupe];
@@ -510,7 +549,7 @@
 
     champCache('Prestation', etat.type || '—');
     champCache('Véhicules', auto()
-      ? etat.nb + ' — ' + (etat.categories.join(', ') || 'catégorie non précisée')
+      ? (detailVehicules() || '—')
       : '—');
     champCache('Formules voiture', auto()
       ? (etat.formules.map(function (id) { return TARIFS.formules[id].nom; }).join(', ') || '—')
