@@ -8,32 +8,30 @@
    distance à vol d'oiseau × 1,4.
 
    POUR MODIFIER UN TARIF : tout est dans ZONES ci-dessous (distances en km
-   par la route, aller simple). Pensez à changer aussi les textes des pages
-   contact.html, auto.html et mobilier.html.
+   par la route, aller simple, depuis le point de départ). Pensez à changer
+   aussi les textes des pages contact.html, auto.html, mobilier.html et
+   index.html.
    ========================================================================== */
 (function () {
   'use strict';
 
-  /* Point de départ (quartier Maurepas, arrondi à environ 1 km près) */
+  /* Point de départ : nord-est de Rennes, volontairement arrondi au
+     quartier (environ 1 km près) pour ne pas publier d'adresse exacte. */
   var DEPART = { lon: -1.66, lat: 48.13 };
 
-  /* Code commune INSEE de Rennes : déplacement offert partout dans Rennes */
-  var RENNES = '35238';
-
   var ZONES = [
-    { max: 10, prix: 5 },
+    { max: 10, prix: 5 },                 // presque tout Rennes
     { max: 20, prix: 10 },
-    { max: 30, prix: 20, minimum: 70 }   // 70€ de prestations minimum
+    { max: 30, prix: 20, minimum: 70 },   // 70€ de prestations minimum
+    { max: 40, prix: 30, minimum: 100 },
+    { max: 50, prix: 40, minimum: 100 }
   ];
-  var MAX_KM = 30;                        // au-delà : sur devis
+  var MAX_KM = 50;                        // au-delà : hors zone, sur devis
 
   var API = 'https://data.geopf.fr';
 
   /* ------------------------------------------------------------ CALCUL */
-  function tarif(km, citycode) {
-    if (citycode === RENNES) {
-      return { prix: 0, offert: true, texte: 'Offert', resume: 'Déplacement offert dans Rennes' };
-    }
+  function tarif(km) {
     for (var i = 0; i < ZONES.length; i++) {
       if (km <= ZONES[i].max) {
         var z = ZONES[i];
@@ -48,7 +46,7 @@
     }
     return {
       prix: null, surDevis: true, texte: 'Sur devis',
-      resume: 'Plus de ' + MAX_KM + ' km : déplacement sur devis, appelez-nous'
+      resume: 'Plus de ' + MAX_KM + ' km : hors de notre zone, appelez-nous pour en parler'
     };
   }
 
@@ -79,7 +77,7 @@
     var p = adresse.properties;
     var c = adresse.geometry.coordinates;
     var fin = function (d) {
-      var t = tarif(d.km, p.citycode);
+      var t = tarif(Math.round(d.km));   // même km que celui affiché
       t.km = Math.round(d.km);
       t.estime = d.estime;
       t.adresse = p.label;
@@ -87,25 +85,27 @@
       t.cp = p.postcode;
       return t;
     };
-    if (p.citycode === RENNES) return Promise.resolve(fin({ km: volOiseau(c[0], c[1]) * 1.4, estime: true }));
     return distanceRoute(c[0], c[1]).then(fin);
   }
 
   /* Reconnaît une adresse à Rennes directement dans le texte tapé (code
-     postal 35000 / 35200 / 35700, ou « Rennes » à la fin), sans attendre
-     le service d'adresses : dans Rennes, le déplacement est toujours offert. */
+     postal 35000 / 35200 / 35700, ou « Rennes » à la fin) : sert de repli
+     si le service d'adresses ne répond pas. Prix « dès » le premier palier,
+     car le sud de Rennes est à plus de 10 km par la rocade. */
   function deviner(texte) {
     var t = (texte || '').trim();
     var cp = t.match(/\b(35\d{3})\b/);
     var rennes = cp ? /^35(000|200|700)$/.test(cp[1]) : /(^|[\s,])rennes\s*$/i.test(t);
     if (!rennes) return null;
-    var r = tarif(0, RENNES);
-    r.km = 0;
+    var r = tarif(ZONES[0].max);
+    r.km = null;
     r.estime = true;
     r.adresse = t;
     r.commune = 'Rennes';
     r.cp = cp ? cp[1] : '';
     r.devine = true;
+    r.des = true;
+    r.resume = 'Déplacement : dès ' + r.prix + '€';
     return r;
   }
 
@@ -189,9 +189,8 @@
       message('Calcul du déplacement…', 'is-wait');
       calculer(f).then(function (r) {
         if (n !== numero) return;
-        var detail = r.offert ? r.resume
-          : r.resume + ' — environ ' + r.km + ' km de route' + (r.estime ? ' (estimation)' : '');
-        message(detail, r.surDevis ? 'is-far' : (r.offert ? 'is-free' : ''));
+        message(r.resume + ' — environ ' + r.km + ' km de route' + (r.estime ? ' (estimation)' : ''),
+                r.surDevis ? 'is-far' : '');
         signaler(r);
       });
     }
@@ -216,7 +215,7 @@
       if (texte.length < 3) { propositions = []; afficherListe(); message(''); return; }
       var rennes = deviner(texte);
       if (rennes) {
-        message(rennes.resume, 'is-free');
+        message(rennes.resume + ' (Rennes)', '');
         signaler(rennes);
       } else {
         message('Choisissez votre adresse dans la liste pour voir le prix du déplacement.', 'is-wait');

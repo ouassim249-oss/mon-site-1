@@ -166,14 +166,13 @@
         lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
       } else if (d.surDevis) {
         lignes.push({ label: 'Déplacement — ' + d.commune + ' (' + d.km + ' km)', devis: true });
-      } else if (d.offert) {
-        lignes.push({ label: 'Déplacement — ' + d.commune, texte: 'Offert' });
       } else {
         if (d.minimum && total > 0 && total < d.minimum) {
-          lignes.push({ label: 'Complément minimum de commande (' + d.minimum + '€ au-delà de 20 km)', prix: d.minimum - total });
+          lignes.push({ label: 'Complément pour atteindre ' + d.minimum + '€ de prestations (minimum à cette distance)', prix: d.minimum - total });
           total = d.minimum;
         }
-        lignes.push({ label: 'Déplacement — ' + d.commune + ' (' + d.km + ' km)', prix: d.prix });
+        lignes.push({ label: 'Déplacement — ' + d.commune + (d.km != null ? ' (' + d.km + ' km)' : ''), prix: d.prix });
+        if (d.des) approx = true;
         total += d.prix;
       }
     }
@@ -545,8 +544,8 @@
     champCache('Commune', champ('q-adresse').value.trim());
     champCache('Code postal', d ? d.cp : '—');
     champCache('Déplacement', !d ? 'adresse non choisie dans la liste : à calculer'
-      : d.offert ? 'offert (Rennes)'
-      : (d.surDevis ? 'sur devis' : d.prix + '€') + ' — environ ' + d.km + ' km de route' + (d.estime ? ' (estimation)' : ''));
+      : (d.surDevis ? 'hors zone, sur devis' : d.prix + '€') +
+        (d.km != null ? ' — environ ' + d.km + ' km de route' : ' — Rennes') + (d.estime ? ' (estimation)' : ''));
     champCache('Provenance', window.cwProvenance ? window.cwProvenance() : '—');
 
     var original = btnSend.textContent;
