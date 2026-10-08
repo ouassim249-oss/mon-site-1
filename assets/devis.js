@@ -28,7 +28,6 @@
     },
     extras: {
       coffre:      { nom: 'Nettoyage coffre',           prix: 10, parVehicule: true },
-      deplacement: { nom: 'Déplacement en dehors de Rennes', prix: 5,  parVehicule: false },
       salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true, des: true }
     },
     meubles: {
@@ -62,7 +61,8 @@
     formules: [],
     extras: [],
     meubles: [],
-    tailles: {}        // { droit: '3 places', ... }
+    tailles: {},       // { droit: '3 places', ... }
+    depl: null         // prix du déplacement calculé depuis l'adresse (assets/deplacement.js)
   };
 
   var etape = 1;
@@ -77,6 +77,16 @@
   var btnNext   = form.querySelector('[data-next]');
   var btnSend   = form.querySelector('[data-send]');
   var statut    = document.getElementById('formStatus');
+
+  /* Adresse d'intervention : le prix du déplacement est calculé dès que
+     le client choisit son adresse dans la liste. */
+  var champAdresse = document.getElementById('q-adresse');
+  if (champAdresse && window.cwDeplacement) {
+    window.cwDeplacement.attacher(champAdresse, {
+      resultat: form.querySelector('[data-addr-result]'),
+      change: function (r) { etat.depl = r; majBoutons(); }
+    });
+  }
 
   function auto() { return etat.type === 'Voiture' || etat.type === 'Les deux'; }
   function mob()  { return etat.type === 'Mobilier' || etat.type === 'Les deux'; }
@@ -148,6 +158,25 @@
       });
     }
 
+    /* Déplacement (voiture et mobilier) */
+    if (lignes.length) {
+      var d = etat.depl;
+      if (!d) {
+        lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
+      } else if (d.surDevis) {
+        lignes.push({ label: 'Déplacement — ' + d.commune + ' (' + d.km + ' km)', devis: true });
+      } else if (d.offert) {
+        lignes.push({ label: 'Déplacement — ' + d.commune, texte: 'Offert' });
+      } else {
+        if (d.minimum && total > 0 && total < d.minimum) {
+          lignes.push({ label: 'Complément minimum de commande (' + d.minimum + '€ au-delà de 20 km)', prix: d.minimum - total });
+          total = d.minimum;
+        }
+        lignes.push({ label: 'Déplacement — ' + d.commune + ' (' + d.km + ' km)', prix: d.prix });
+        total += d.prix;
+      }
+    }
+
     return { lignes: lignes, total: total, approx: approx };
   }
 
@@ -178,7 +207,7 @@
         var g = document.createElement('span');
         g.textContent = l.label;
         var d = document.createElement('b');
-        d.textContent = l.devis ? 'Sur devis' : (l.info ? '' : l.prix + '€');
+        d.textContent = l.texte || (l.devis ? 'Sur devis' : (l.info ? '' : l.prix + '€'));
         ligne.appendChild(g);
         ligne.appendChild(d);
         boite.appendChild(ligne);
@@ -276,7 +305,7 @@
 
     if (n === 4) {
       if (!rempli('q-prenom') || !rempli('q-nom') || !rempli('q-tel') ||
-          !rempli('q-cp') || !rempli('q-ville')) return false;
+          champ('q-adresse').value.trim().length < 3) return false;
       var email = champ('q-email');
       if (email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) return false;
       var tel = champ('q-tel').value.replace(/[^\d+]/g, '');
@@ -507,9 +536,16 @@
         }).join(' | ') || '—')
       : '—');
     champCache('Détail du devis', r.lignes.map(function (l) {
-      return l.label + (l.devis ? ' : sur devis' : (l.info ? '' : ' : ' + l.prix + '€'));
+      return l.label + (l.texte ? ' : ' + l.texte.toLowerCase() : (l.devis ? ' : sur devis' : (l.info ? '' : ' : ' + l.prix + '€')));
     }).join(' | '));
     champCache('Total estimé', texteTotal(r));
+    /* Gardent les noms de colonne du Google Sheet (« Commune » reçoit l'adresse complète) */
+    var d = etat.depl;
+    champCache('Commune', champ('q-adresse').value.trim());
+    champCache('Code postal', d ? d.cp : '—');
+    champCache('Déplacement', !d ? 'adresse non choisie dans la liste : à calculer'
+      : d.offert ? 'offert (Rennes)'
+      : (d.surDevis ? 'sur devis' : d.prix + '€') + ' — environ ' + d.km + ' km de route' + (d.estime ? ' (estimation)' : ''));
     champCache('Provenance', window.cwProvenance ? window.cwProvenance() : '—');
 
     var original = btnSend.textContent;

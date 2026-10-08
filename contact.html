@@ -114,7 +114,15 @@
     <div class="reveal">
       <span class="eyebrow">Zone d'intervention</span>
       <h2>On se déplace à Rennes et alentours</h2>
-      <p class="lead">Vous n'êtes pas sûr qu'on vienne chez vous ? Appelez-nous, on trouvera une solution.</p>
+      <p class="lead">Déplacement offert dans Rennes. Autour de Rennes, le prix dépend de la distance : tapez votre adresse pour le connaître.</p>
+    </div>
+    <div class="calc-depl reveal">
+      <h3>Combien coûte le déplacement chez vous ?</h3>
+      <p>Tapez votre adresse puis choisissez-la dans la liste.</p>
+      <div class="form-group">
+        <input type="text" id="calc-adresse" aria-label="Votre adresse" placeholder="Ex. : 12 rue de Paris, Cesson-Sévigné" data-calc-deplacement="calc-resultat">
+        <p class="addr-result" id="calc-resultat" aria-live="polite"></p>
+      </div>
     </div>
     <div class="zone-list reveal">
       <span class="zone-chip">Rennes</span>
@@ -151,7 +159,7 @@
     <div class="faq reveal" style="margin-top:40px">
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Où intervenez-vous ?</button>
-        <div class="faq-a"><p>À Rennes et dans un rayon de 30 km. Le déplacement est gratuit dans Rennes intra-muros. En dehors de Rennes, il est facturé 5€, et un peu plus selon la distance.</p></div>
+        <div class="faq-a"><p>À Rennes et jusqu'à 30 km autour. Le déplacement est offert dans Rennes. Autour de Rennes, il coûte 5€ jusqu'à 10 km de route, 10€ jusqu'à 20 km, et 20€ jusqu'à 30 km (avec 70€ de prestations minimum). Au-delà, c'est sur devis. Le calculateur plus haut vous donne le prix exact pour votre adresse.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Combien de temps dure une prestation ?</button>
@@ -250,5 +258,6 @@
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/deplacement.js"></script>
 </body>
 </html>

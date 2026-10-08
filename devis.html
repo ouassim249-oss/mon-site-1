@@ -86,7 +86,7 @@
       <!-- ============ ÉTAPE 1 — TYPE DE PRESTATION ============ -->
       <section class="wz-panel" data-panel="1" data-name="Prestation">
         <p class="wz-q">Que faut-il nettoyer ?</p>
-        <p class="wz-hint">On se déplace à domicile à Rennes et jusqu'à 30 km autour.</p>
+        <p class="wz-hint">On se déplace à domicile à Rennes et jusqu'à 30 km autour. Déplacement offert dans Rennes.</p>
         <div class="wz-choices" data-choice="type">
           <button type="button" class="wz-choice" data-value="Voiture"><svg class="ico" aria-hidden="true"><use href="#i-car"/></svg> Voiture<small>Intérieur</small></button>
           <button type="button" class="wz-choice" data-value="Mobilier"><svg class="ico" aria-hidden="true"><use href="#i-sofa"/></svg> Mobilier<small>Canapé, matelas…</small></button>
@@ -175,15 +175,10 @@
               <span class="wz-box"></span><span class="wz-opt-name">Nettoyage coffre</span><span class="wz-opt-price">+10€</span>
             </label>
             <label class="wz-opt">
-              <input type="checkbox" class="wz-native" data-value="deplacement">
-              <span class="wz-box"></span><span class="wz-opt-name">Déplacement en dehors de Rennes</span><span class="wz-opt-price">+5€</span>
-            </label>
-            <label class="wz-opt">
               <input type="checkbox" class="wz-native" data-value="salissures">
               <span class="wz-box"></span><span class="wz-opt-name">Poils / sable / moisissure</span><span class="wz-opt-price">dès +10€</span>
             </label>
           </div>
-          <p class="wz-note">En dehors de Rennes, le tarif de déplacement peut augmenter selon la distance.</p>
         </div>
 
         <div class="wz-block" data-block="mobilier" hidden>
@@ -216,14 +211,11 @@
             <label for="q-tel">Téléphone *</label>
             <input type="tel" id="q-tel" name="Téléphone" placeholder="06 12 34 56 78" autocomplete="tel" data-required>
           </div>
-          <div class="form-group">
-            <label for="q-cp">Code postal *</label>
-            <input type="text" id="q-cp" name="Code postal" placeholder="35000" inputmode="numeric" autocomplete="postal-code" data-required>
-          </div>
         </div>
         <div class="form-group">
-          <label for="q-ville">Commune d'intervention *</label>
-          <input type="text" id="q-ville" name="Commune" placeholder="Rennes" autocomplete="address-level2" data-required>
+          <label for="q-adresse">Adresse d'intervention *</label>
+          <input type="text" id="q-adresse" placeholder="Ex. : 12 rue de Paris, Cesson-Sévigné" data-required>
+          <p class="addr-result is-wait" data-addr-result>Tapez votre adresse puis choisissez-la dans la liste : le prix du déplacement s'affiche tout de suite.</p>
         </div>
       </section>
 
@@ -327,6 +319,7 @@
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/deplacement.js"></script>
 <script src="assets/devis.js"></script>
 </body>
 </html>
