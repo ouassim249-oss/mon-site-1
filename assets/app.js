@@ -160,6 +160,7 @@
     var dotsBox = root.querySelector('[data-ba-dots]');
     var index = 0;
     var dragging = false;
+    var position = 50;      // position actuelle de la barre, en %
 
     if (!frame || !slides.length) return;
 
@@ -184,6 +185,7 @@
 
     function setPosition(pct) {
       pct = Math.max(0, Math.min(100, pct));
+      position = pct;
       slides.forEach(function (s) {
         var wrap = s.querySelector('.ba-after-wrap');
         if (wrap) wrap.style.clipPath = 'inset(0 0 0 ' + pct + '%)';
@@ -217,8 +219,18 @@
       /* Sans ce preventDefault, le navigateur démarre son propre
          glisser-déposer de l'image et le curseur se fige en plein mouvement. */
       if (e.cancelable && !e.touches) e.preventDefault();
-      dragging = true;
       var x = e.touches ? e.touches[0].clientX : e.clientX;
+      if (e.touches) {
+        /* Au doigt, seule la barre se déplace : toucher la photo ailleurs ne
+           fait rien (la page défile normalement). On laisse 32 px de marge
+           de chaque côté de la barre pour l'attraper facilement. */
+        var r = frame.getBoundingClientRect();
+        var barre = r.left + r.width * position / 100;
+        if (Math.abs(x - barre) > 32) return;
+        dragging = true;
+        return;
+      }
+      dragging = true;
       setPosition(pointerPct(x));
     }
 
@@ -243,7 +255,7 @@
     document.addEventListener('mouseleave', endDrag);
 
     /* Pas de suivi au survol : le curseur ne bouge que si on le fait glisser
-       (clic maintenu à la souris, ou doigt sur mobile). */
+       (clic maintenu à la souris, ou doigt posé sur la barre sur mobile). */
 
     if (prev) prev.addEventListener('click', function () { show(index - 1); });
     if (next) next.addEventListener('click', function () { show(index + 1); });
