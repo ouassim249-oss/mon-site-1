@@ -1111,8 +1111,11 @@ a.hero-stat:hover { border-color: rgba(90, 170, 245, .5); }
    réduit à la largeur de sa légende (ses photos sont en position absolue) */
 .split .ba { width: 100%; }
 
-/* « + 14 autres » : renvoie vers la liste complète sur la page Contact */
+/* « + N autres » : affiche les autres communes de la zone */
+.zone-chip[hidden] { display: none; }
 .zone-chip--more {
+  font-family: inherit;
+  cursor: pointer;
   color: var(--blue);
   border-color: rgba(45, 140, 240, .45);
   font-weight: 600;
@@ -1317,3 +1320,40 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .btn-row .btn { flex: 1 1 100%; }
   .ba-frame { aspect-ratio: 3 / 4; }
 }
+
+/* ---------- Calculateur de déplacement (adresse) ---------- */
+.addr-list {
+  position: absolute;
+  left: 0; right: 0;
+  z-index: 30;
+  margin: 4px 0 0;
+  padding: 6px 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+.addr-list[hidden] { display: none; }
+.addr-list li { padding: 10px 15px; font-size: .94rem; color: var(--text); cursor: pointer; }
+.addr-list li:hover,
+.addr-list li.is-on { background: var(--blue-pale); color: var(--navy); }
+.addr-result { font-size: .92rem; font-weight: 600; color: var(--navy); margin: 8px 0 0; min-height: 1.4em; text-align: left; }
+.addr-result.is-free { color: #1a9d5c; }
+.addr-result.is-far { color: #c2621a; }
+.addr-result.is-wait { color: var(--gray); font-weight: 500; }
+.calc-depl {
+  max-width: 560px;
+  margin: 30px auto 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 24px 18px;
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+.calc-depl h3 { margin: 0 0 4px; font-size: 1.05rem; color: var(--navy); }
+.calc-depl > p { margin: 0 0 14px; font-size: .9rem; color: var(--gray); }
+.calc-depl .form-group { margin-bottom: 0; }
+.wz-opt-name small { display: block; font-size: .8rem; font-weight: 500; color: var(--gray); margin-top: 2px; }

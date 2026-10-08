@@ -17,19 +17,12 @@
     formules: {
       sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
       premium: {
-        nom: 'Formule Premium',
-        prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
-        parCategorie: {                 // le tarif Premium dépend du gabarit
-          'Citadine / Berline': 60,
-          'SUV / 4×4': 70,
-          'Van / Monospace': 80
-        }
+        nom: 'Formule Premium (coffre inclus)',
+        prix: 60                        // même prix quel que soit le véhicule
       }
     },
     extras: {
-      coffre:      { nom: 'Nettoyage coffre',           prix: 10, parVehicule: true },
-      deplacement: { nom: 'Déplacement en dehors de Rennes', prix: 5,  parVehicule: false },
-      salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true, des: true }
+      salissures:  { nom: 'Poils / sable / moisissure', prix: 10, parVehicule: true }
     },
     meubles: {
       droit: {
@@ -42,12 +35,10 @@
       },
       matelas: {
         nom: 'Matelas',
-        des: true,
         tailles: { '1 place': 35, '2 places': 50 }
       },
       chaise: {
         nom: 'Chaises / tabourets',
-        des: true,
         tailles: { '1 chaise': 10, '2 chaises': 20, '3 chaises': 30, '4 chaises': 40, '6 chaises': 60 }
       },
       tapis: { nom: 'Tapis / moquette', surDevis: true }
@@ -62,7 +53,8 @@
     formules: [],
     extras: [],
     meubles: [],
-    tailles: {}        // { droit: '3 places', ... }
+    tailles: {},       // { droit: '3 places', ... }
+    depl: null         // prix du déplacement calculé depuis l'adresse (assets/deplacement.js)
   };
 
   var etape = 1;
@@ -77,6 +69,16 @@
   var btnNext   = form.querySelector('[data-next]');
   var btnSend   = form.querySelector('[data-send]');
   var statut    = document.getElementById('formStatus');
+
+  /* Adresse d'intervention : le prix du déplacement est calculé dès que
+     le client choisit son adresse dans la liste. */
+  var champAdresse = document.getElementById('q-adresse');
+  if (champAdresse && window.cwDeplacement) {
+    window.cwDeplacement.attacher(champAdresse, {
+      resultat: form.querySelector('[data-addr-result]'),
+      change: function (r) { etat.depl = r; majBoutons(); if (etape === TOTAL_ETAPES) majRecap(); }
+    });
+  }
 
   function auto() { return etat.type === 'Voiture' || etat.type === 'Les deux'; }
   function mob()  { return etat.type === 'Mobilier' || etat.type === 'Les deux'; }
@@ -148,6 +150,22 @@
       });
     }
 
+    /* Déplacement (voiture et mobilier) */
+    if (lignes.length) {
+      var d = etat.depl ||
+        (window.cwDeplacement && champAdresse ? window.cwDeplacement.deviner(champAdresse.value) : null);
+      if (!d) {
+        lignes.push({ label: 'Déplacement', texte: 'À confirmer' });
+      } else if (d.surDevis) {
+        lignes.push({ label: 'Déplacement — ' + d.commune, devis: true });
+      } else if (d.offert) {
+        lignes.push({ label: 'Déplacement — ' + d.commune, texte: 'Offert' });
+      } else {
+        lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
+        total += d.prix;
+      }
+    }
+
     return { lignes: lignes, total: total, approx: approx };
   }
 
@@ -178,7 +196,7 @@
         var g = document.createElement('span');
         g.textContent = l.label;
         var d = document.createElement('b');
-        d.textContent = l.devis ? 'Sur devis' : (l.info ? '' : l.prix + '€');
+        d.textContent = l.texte || (l.devis ? 'Sur devis' : (l.info ? '' : l.prix + '€'));
         ligne.appendChild(g);
         ligne.appendChild(d);
         boite.appendChild(ligne);
@@ -276,7 +294,7 @@
 
     if (n === 4) {
       if (!rempli('q-prenom') || !rempli('q-nom') || !rempli('q-tel') ||
-          !rempli('q-cp') || !rempli('q-ville')) return false;
+          champ('q-adresse').value.trim().length < 3) return false;
       var email = champ('q-email');
       if (email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) return false;
       var tel = champ('q-tel').value.replace(/[^\d+]/g, '');
@@ -507,9 +525,16 @@
         }).join(' | ') || '—')
       : '—');
     champCache('Détail du devis', r.lignes.map(function (l) {
-      return l.label + (l.devis ? ' : sur devis' : (l.info ? '' : ' : ' + l.prix + '€'));
+      return l.label + (l.texte ? ' : ' + l.texte.toLowerCase() : (l.devis ? ' : sur devis' : (l.info ? '' : ' : ' + l.prix + '€')));
     }).join(' | '));
     champCache('Total estimé', texteTotal(r));
+    /* Gardent les noms de colonne du Google Sheet (« Commune » reçoit l'adresse complète) */
+    var d = etat.depl || (window.cwDeplacement ? window.cwDeplacement.deviner(champ('q-adresse').value) : null);
+    champCache('Commune', champ('q-adresse').value.trim());
+    champCache('Code postal', d ? d.cp : '—');
+    champCache('Déplacement', !d ? 'adresse non choisie dans la liste : à calculer'
+      : (d.surDevis ? 'hors zone, sur devis' : d.offert ? 'offert' : d.prix + '€') +
+        (d.km != null ? ' — environ ' + d.km + ' km de route' : ' — Rennes') + (d.estime ? ' (estimation)' : ''));
     champCache('Provenance', window.cwProvenance ? window.cwProvenance() : '—');
 
     var original = btnSend.textContent;

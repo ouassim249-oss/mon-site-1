@@ -340,3 +340,28 @@ h1, h2, h3, h4 { color: #fff; }
 .formule--featured { box-shadow: 0 10px 30px rgba(45, 140, 240, .14); }
 .btn-primary { box-shadow: 0 4px 14px rgba(45, 140, 240, .24); }
 .step-num { box-shadow: 0 4px 14px rgba(45, 140, 240, .3); }
+
+/* ==========================================================================
+   CALCULATEUR DE DÉPLACEMENT
+   ========================================================================== */
+.addr-list {
+  background: var(--navy2);
+  border-color: rgba(255, 255, 255, .14);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .45);
+}
+.addr-list li { color: #c2d2e3; }
+.addr-list li:hover,
+.addr-list li.is-on { background: rgba(45, 140, 240, .18); color: #fff; }
+.addr-result { color: #fff; }
+.addr-result.is-free { color: #4fd18b; }
+.addr-result.is-far { color: #f0a35a; }
+.addr-result.is-wait { color: #8fa5bb; }
+.calc-depl {
+  background: rgba(255, 255, 255, .05);
+  border-color: rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.calc-depl h3 { color: #fff; }
+.calc-depl > p { color: #8fa5bb; }
+.wz-opt-name small { color: #8fa5bb; }

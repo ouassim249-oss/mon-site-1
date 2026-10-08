@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact &amp; FAQ — Carsherwash Rennes</title>
-<meta name="description" content="Contactez Carsherwash : 06 27 94 53 61, 7j/7 de 9h à 19h, Rennes et 30 km autour. Questions fréquentes sur le nettoyage auto et mobilier à domicile.">
+<meta name="description" content="Contactez Carsherwash : 06 27 94 53 61, 7j/7 de 9h à 19h, Rennes et 50 km autour. Questions fréquentes sur le nettoyage auto et mobilier à domicile.">
 <link rel="canonical" href="https://carsherwash.com/contact.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,7 +48,7 @@
       <a href="mobilier.html">Mobilier</a>
       <a href="realisations.html">Réalisations</a>
       <a href="contact.html" class="active">Contact</a>
-      <a href="devis.html" class="nav-cta">Devis gratuit</a>
+      <a href="devis.html" class="nav-cta">Réserver</a>
     </nav>
   </div>
 </header>
@@ -80,7 +80,7 @@
         <div class="card-icon"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg></div>
         <h3>Horaires &amp; zone</h3>
         <p><strong>7j/7 — 9h à 19h</strong></p>
-        <p>Rennes + 30 km</p>
+        <p>Rennes + 50 km</p>
         <p>Intervention à domicile ou sur votre lieu de travail</p>
       </div>
       <div class="contact-card reveal">
@@ -114,28 +114,51 @@
     <div class="reveal">
       <span class="eyebrow">Zone d'intervention</span>
       <h2>On se déplace à Rennes et alentours</h2>
-      <p class="lead">Vous n'êtes pas sûr qu'on vienne chez vous ? Appelez-nous, on trouvera une solution.</p>
+      <p class="lead">On vient chez vous jusqu'à 50 km autour de Rennes. Le prix du déplacement dépend de la distance : tapez votre adresse pour le connaître.</p>
+    </div>
+    <div class="calc-depl reveal">
+      <h3>Combien coûte le déplacement chez vous ?</h3>
+      <p>Tapez votre adresse puis choisissez-la dans la liste.</p>
+      <div class="form-group">
+        <input type="text" id="calc-adresse" aria-label="Votre adresse" placeholder="Ex. : 12 rue de Paris, Cesson-Sévigné" data-calc-deplacement="calc-resultat">
+        <p class="addr-result" id="calc-resultat" aria-live="polite"></p>
+      </div>
     </div>
     <div class="zone-list reveal">
       <span class="zone-chip">Rennes</span>
-      <span class="zone-chip">Acigné</span>
-      <span class="zone-chip">Betton</span>
-      <span class="zone-chip">Bruz</span>
       <span class="zone-chip">Cesson-Sévigné</span>
-      <span class="zone-chip">Chantepie</span>
-      <span class="zone-chip">Chartres-de-Bretagne</span>
-      <span class="zone-chip">L'Hermitage</span>
-      <span class="zone-chip">Le Rheu</span>
-      <span class="zone-chip">Melesse</span>
-      <span class="zone-chip">Montgermont</span>
-      <span class="zone-chip">Noyal-Châtillon-sur-Seiche</span>
-      <span class="zone-chip">Noyal-sur-Vilaine</span>
-      <span class="zone-chip">Pacé</span>
       <span class="zone-chip">Saint-Grégoire</span>
-      <span class="zone-chip">Saint-Jacques-de-la-Lande</span>
+      <span class="zone-chip">Bruz</span>
+      <span class="zone-chip">Betton</span>
+      <span class="zone-chip">Chantepie</span>
       <span class="zone-chip">Thorigné-Fouillard</span>
+      <span class="zone-chip">Pacé</span>
+      <span class="zone-chip">Saint-Jacques-de-la-Lande</span>
       <span class="zone-chip">Vern-sur-Seiche</span>
+      <span class="zone-chip">Chartres-de-Bretagne</span>
+      <span class="zone-chip">Le Rheu</span>
       <span class="zone-chip">Vezin-le-Coquet</span>
+      <span class="zone-chip">Montgermont</span>
+      <span class="zone-chip">Acigné</span>
+      <span class="zone-chip">Noyal-sur-Vilaine</span>
+      <span class="zone-chip">Noyal-Châtillon-sur-Seiche</span>
+      <span class="zone-chip">Melesse</span>
+      <span class="zone-chip">L&#39;Hermitage</span>
+      <span class="zone-chip">Mordelles</span>
+      <span class="zone-chip">Liffré</span>
+      <span class="zone-chip">Châteaugiron</span>
+      <span class="zone-chip">Guichen</span>
+      <span class="zone-chip">Laillé</span>
+      <span class="zone-chip">Saint-Aubin-d&#39;Aubigné</span>
+      <span class="zone-chip">Saint-Aubin-du-Cormier</span>
+      <span class="zone-chip">Tinténiac</span>
+      <span class="zone-chip">Montfort-sur-Meu</span>
+      <span class="zone-chip">Montauban-de-Bretagne</span>
+      <span class="zone-chip">Janzé</span>
+      <span class="zone-chip">Bain-de-Bretagne</span>
+      <span class="zone-chip">Plélan-le-Grand</span>
+      <span class="zone-chip">Combourg</span>
+      <span class="zone-chip">Vitré</span>
       <span class="zone-chip">Et environs</span>
     </div>
   </div>
@@ -151,7 +174,7 @@
     <div class="faq reveal" style="margin-top:40px">
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Où intervenez-vous ?</button>
-        <div class="faq-a"><p>À Rennes et dans un rayon de 30 km. Le déplacement intra-muros est facturé 5€, au-delà on étudie chaque demande selon la distance.</p></div>
+        <div class="faq-a"><p>À Rennes et jusqu'à 50 km autour. Le déplacement est calculé selon la distance en voiture : offert jusqu'à 10 km, 10€ jusqu'à 20 km, 20€ jusqu'à 30 km, 30€ jusqu'à 40 km et 40€ jusqu'à 50 km. Le calculateur plus haut vous donne le prix exact pour votre adresse.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Combien de temps dure une prestation ?</button>
@@ -175,7 +198,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Le tarif change-t-il selon mon véhicule ?</button>
-        <div class="faq-a"><p>Oui, pour la formule Premium : 60€ pour une citadine ou une berline, 70€ pour un SUV ou un 4x4, 80€ pour un van ou un monospace. La formule Sièges est à 40€ quel que soit le véhicule. Seul l'état peut ensuite faire varier le devis (poils d'animaux, sable, moisissure).</p></div>
+        <div class="faq-a"><p>Non : la formule Sièges est à 40€ et la formule Premium à 60€, quel que soit le véhicule. Seul l'état peut ensuite faire varier le prix (poils d'animaux, sable, moisissure).</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Nettoyez-vous autre chose que des voitures ?</button>
@@ -183,7 +206,7 @@
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Comment prendre rendez-vous ?</button>
-        <div class="faq-a"><p>Remplissez le <a href="devis.html" style="color:var(--blue);font-weight:600">formulaire de devis</a>, appelez le 06 27 94 53 61 ou envoyez-nous un SMS. Disponibles 7j/7 de 9h à 19h.</p></div>
+        <div class="faq-a"><p>Remplissez le <a href="devis.html" style="color:var(--blue);font-weight:600">formulaire de réservation</a>, appelez le 06 27 94 53 61 ou envoyez-nous un SMS. Disponibles 7j/7 de 9h à 19h.</p></div>
       </div>
     </div>
   </div>
@@ -191,10 +214,10 @@
 
 <section class="cta-band">
   <div class="container">
-    <h2>Envie d'un devis tout de suite ?</h2>
+    <h2>Envie de réserver tout de suite ?</h2>
     <p>Deux minutes suffisent — réponse rapide, sans engagement.</p>
     <div class="btn-row">
-      <a href="devis.html" class="btn btn-primary btn-lg">Obtenir mon devis <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a href="devis.html" class="btn btn-primary btn-lg">Réserver maintenant <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <a href="tel:+33627945361" class="btn btn-ghost btn-lg"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> Appeler maintenant</a>
     </div>
   </div>
@@ -224,7 +247,7 @@
           <li><a href="mobilier.html">Nettoyage mobilier</a></li>
           <li><a href="realisations.html">Réalisations</a></li>
           <li><a href="contact.html">Contact &amp; FAQ</a></li>
-          <li><a href="devis.html">Devis gratuit</a></li>
+          <li><a href="devis.html">Réserver</a></li>
         </ul>
       </div>
       <div>
@@ -244,11 +267,12 @@
 
 <div class="action-bar">
   <a class="btn btn-outline" href="tel:+33627945361"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg> Appeler</a>
-  <a class="btn btn-primary" href="devis.html"><svg class="ico" aria-hidden="true"><use href="#i-euro"/></svg> Devis en 2 min</a>
+  <a class="btn btn-primary" href="devis.html"><svg class="ico" aria-hidden="true"><use href="#i-euro"/></svg> Réserver</a>
 </div>
 
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/deplacement.js"></script>
 </body>
 </html>
