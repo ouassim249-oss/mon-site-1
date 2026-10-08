@@ -97,31 +97,34 @@
       <!-- ============ ÉTAPE 2 — CE QU'IL FAUT NETTOYER ============ -->
       <section class="wz-panel" data-panel="2" data-name="Véhicules" hidden>
         <div class="wz-block" data-block="auto">
-          <p class="wz-q">Nombre de véhicules à nettoyer</p>
-          <div class="wz-choices" data-choice="nb">
-            <button type="button" class="wz-choice" data-value="1">1</button>
-            <button type="button" class="wz-choice" data-value="2">2</button>
-            <button type="button" class="wz-choice" data-value="3">3</button>
-            <button type="button" class="wz-choice" data-value="4+">4+</button>
+          <p class="wz-q">Combien de véhicules, et de quel type ?</p>
+          <p class="wz-hint">Appuyez sur + pour chaque véhicule à nettoyer.</p>
+          <div class="wz-opts" data-compteurs>
+            <div class="wz-opt wz-count" data-cat="Citadine / Berline">
+              <span class="wz-opt-name">Citadine / Berline</span>
+              <div class="wz-count-ctl">
+                <button type="button" class="wz-count-btn" data-moins aria-label="Retirer un véhicule Citadine / Berline">−</button>
+                <output class="wz-count-val" aria-live="polite">0</output>
+                <button type="button" class="wz-count-btn" data-plus aria-label="Ajouter un véhicule Citadine / Berline">+</button>
+              </div>
+            </div>
+            <div class="wz-opt wz-count" data-cat="SUV / 4×4">
+              <span class="wz-opt-name">SUV / 4×4</span>
+              <div class="wz-count-ctl">
+                <button type="button" class="wz-count-btn" data-moins aria-label="Retirer un véhicule SUV / 4×4">−</button>
+                <output class="wz-count-val" aria-live="polite">0</output>
+                <button type="button" class="wz-count-btn" data-plus aria-label="Ajouter un véhicule SUV / 4×4">+</button>
+              </div>
+            </div>
+            <div class="wz-opt wz-count" data-cat="Van / Monospace">
+              <span class="wz-opt-name">Van / Monospace</span>
+              <div class="wz-count-ctl">
+                <button type="button" class="wz-count-btn" data-moins aria-label="Retirer un véhicule Van / Monospace">−</button>
+                <output class="wz-count-val" aria-live="polite">0</output>
+                <button type="button" class="wz-count-btn" data-plus aria-label="Ajouter un véhicule Van / Monospace">+</button>
+              </div>
+            </div>
           </div>
-
-          <p class="wz-sub">Catégorie(s) de véhicule</p>
-          <p class="wz-hint">Sélectionnez plusieurs catégories si vos véhicules ne sont pas du même type.</p>
-          <div class="wz-opts" data-group="categorie">
-            <label class="wz-opt">
-              <input type="checkbox" class="wz-native" data-value="Citadine / Berline">
-              <span class="wz-box"></span><span class="wz-opt-name">Citadine / Berline</span>
-            </label>
-            <label class="wz-opt">
-              <input type="checkbox" class="wz-native" data-value="SUV / 4×4">
-              <span class="wz-box"></span><span class="wz-opt-name">SUV / 4×4</span>
-            </label>
-            <label class="wz-opt">
-              <input type="checkbox" class="wz-native" data-value="Van / Monospace">
-              <span class="wz-box"></span><span class="wz-opt-name">Van / Monospace</span>
-            </label>
-          </div>
-          <p class="wz-note">Le tarif est le même quelle que soit la catégorie de véhicule.</p>
         </div>
 
         <div class="wz-block" data-block="mobilier" hidden>

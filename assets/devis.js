@@ -53,8 +53,9 @@
   /* ----------------------------------------------------------------- ÉTAT */
   var etat = {
     type: null,        // 'Voiture' | 'Mobilier' | 'Les deux'
-    nb: null,          // '1' | '2' | '3' | '4+'
-    categories: [],
+    nb: null,          // nombre total de véhicules (texte), null si aucun
+    categories: [],    // types ayant au moins un véhicule
+    compte: {},        // { 'SUV / 4×4': 1, 'Van / Monospace': 1, ... }
     formules: [],
     extras: [],
     meubles: [],
@@ -87,49 +88,40 @@
 
   function auto() { return etat.type === 'Voiture' || etat.type === 'Les deux'; }
   function mob()  { return etat.type === 'Mobilier' || etat.type === 'Les deux'; }
-  function nbVehicules() { return etat.nb === '4+' ? 4 : parseInt(etat.nb || '1', 10); }
+  function nbVehicules() { return parseInt(etat.nb || '0', 10); }
+
+  /* « 1 SUV / 4×4, 1 Van / Monospace » */
+  function detailVehicules() {
+    return etat.categories.map(function (c) { return etat.compte[c] + ' ' + c; }).join(', ');
+  }
 
   /* -------------------------------------------------------------- CALCUL */
 
-  /* Tarif d'une formule pour un véhicule. Si plusieurs catégories sont cochées,
-     on ne peut pas savoir laquelle va avec quel véhicule : on affiche alors
-     une fourchette (« 60€ à 80€ »), jamais de « dès ». */
-  function prixUnitaire(f) {
-    if (!f.parCategorie) return { prix: f.prix, max: f.prix, suffixe: '' };
-
-    var connues = etat.categories.filter(function (c) { return f.parCategorie[c] != null; });
-    if (!connues.length) connues = Object.keys(f.parCategorie);
-
-    var prix = connues.map(function (c) { return f.parCategorie[c]; });
-    return {
-      prix: Math.min.apply(null, prix),
-      max: Math.max.apply(null, prix),
-      suffixe: connues.length === 1 ? ' — ' + connues[0] : ''
-    };
+  /* Prix d'une formule pour tous les véhicules : chaque véhicule paie le
+     tarif de son type (ex. 1 SUV + 1 van en Premium = 70 + 80 = 150€). */
+  function prixFormule(f) {
+    if (!f.parCategorie) return f.prix * nbVehicules();
+    return etat.categories.reduce(function (somme, c) {
+      var p = f.parCategorie[c] != null ? f.parCategorie[c] : f.prix;
+      return somme + p * etat.compte[c];
+    }, 0);
   }
 
   function calcul() {
-    var lignes = [], total = 0, totalMax = 0;
+    var lignes = [], total = 0;
     var n = nbVehicules();
 
     if (auto() && etat.nb) {
       lignes.push({
-        label: etat.nb + (etat.nb === '1' ? ' véhicule' : ' véhicules') +
-               (etat.categories.length ? ' — ' + etat.categories.join(', ') : ''),
+        label: n + (n === 1 ? ' véhicule' : ' véhicules') + ' — ' + detailVehicules(),
         info: true
       });
 
       etat.formules.forEach(function (id) {
         var f = TARIFS.formules[id];
-        var u = prixUnitaire(f);
-        var sous = u.prix * n, sousMax = u.max * n;
-        lignes.push({
-          label: f.nom + u.suffixe + (n > 1 ? ' × ' + etat.nb : ''),
-          prix: sous,
-          texte: sousMax !== sous ? sous + '€ à ' + sousMax + '€' : null
-        });
+        var sous = prixFormule(f);
+        lignes.push({ label: f.nom + (n > 1 ? ' × ' + n : ''), prix: sous });
         total += sous;
-        totalMax += sousMax;
       });
 
       etat.extras.forEach(function (id) {
@@ -138,7 +130,6 @@
         var sous = e.prix * mult;
         lignes.push({ label: e.nom + (mult > 1 ? ' × ' + mult : ''), prix: sous });
         total += sous;
-        totalMax += sous;
       });
     }
 
@@ -151,7 +142,6 @@
         var p = m.tailles[taille];
         lignes.push({ label: m.nom + ' — ' + taille, prix: p });
         total += p;
-        totalMax += p;
       });
     }
 
@@ -168,17 +158,16 @@
       } else {
         lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
         total += d.prix;
-        totalMax += d.prix;
       }
     }
 
-    return { lignes: lignes, total: total, totalMax: totalMax };
+    return { lignes: lignes, total: total };
   }
 
   function texteTotal(r) {
     var payantes = r.lignes.filter(function (l) { return typeof l.prix === 'number'; });
     if (!payantes.length) return 'Sur devis';
-    return r.totalMax !== r.total ? r.total + '€ à ' + r.totalMax + '€' : r.total + '€';
+    return r.total + '€';
   }
 
   /* ------------------------------------------------------- RÉCAPITULATIF */
@@ -212,18 +201,14 @@
     if (total) total.textContent = texteTotal(r);
   }
 
-  /* Prix affiché sur la case Premium : celui de la voiture choisie à
-     l'étape 2 (ou la fourchette si plusieurs catégories sont cochées). */
-  function prixPremium() {
-    var span = form.querySelector('[data-group="formule"] [data-value="premium"]');
-    span = span && span.closest('.wz-opt').querySelector('.wz-opt-price');
-    if (!span) return;
-    var grille = TARIFS.formules.premium.parCategorie;
-    var prix = etat.categories.filter(function (c) { return grille[c] != null; })
-      .map(function (c) { return grille[c]; });
-    if (!prix.length) prix = Object.keys(grille).map(function (c) { return grille[c]; });
-    var mini = Math.min.apply(null, prix), maxi = Math.max.apply(null, prix);
-    span.textContent = mini === maxi ? mini + '€' : mini + '€ à ' + maxi + '€';
+  /* Prix affiché sur les cases des formules : le prix exact pour les
+     véhicules choisis à l'étape 2. */
+  function prixFormulesAffiches() {
+    Object.keys(TARIFS.formules).forEach(function (id) {
+      var input = form.querySelector('[data-group="formule"] [data-value="' + id + '"]');
+      var span = input && input.closest('.wz-opt').querySelector('.wz-opt-price');
+      if (span && nbVehicules()) span.textContent = prixFormule(TARIFS.formules[id]) + '€';
+    });
   }
 
   /* ------------------------------------------ TAILLES DE MOBILIER (ét. 3) */
@@ -296,7 +281,7 @@
     if (n === 1) return !!etat.type;
 
     if (n === 2) {
-      if (auto() && (!etat.nb || !etat.categories.length)) return false;
+      if (auto() && !nbVehicules()) return false;
       if (mob() && !etat.meubles.length) return false;
       return true;
     }
@@ -358,7 +343,7 @@
     libEtape.textContent = 'ÉTAPE ' + n + ' / ' + TOTAL_ETAPES;
     libTitre.textContent = titreEtape(n);
 
-    if (n === 3) { construireTailles(); prixPremium(); }
+    if (n === 3) { construireTailles(); prixFormulesAffiches(); }
     if (n === 5) majRecap();
 
     /* On efface un éventuel message d'erreur dès qu'on bouge d'étape */
@@ -419,8 +404,42 @@
     });
   });
 
+  /* ------------------------------------------- VÉHICULES PAR TYPE (ét. 2) */
+  var MAX_PAR_TYPE = 10;
+  var compteurs = form.querySelectorAll('[data-compteurs] [data-cat]');
+
+  function majCompteurs() {
+    var total = 0;
+    etat.categories = [];
+    compteurs.forEach(function (ligne) {
+      var cat = ligne.getAttribute('data-cat');
+      var n = etat.compte[cat] || 0;
+      total += n;
+      if (n) etat.categories.push(cat);
+      ligne.querySelector('.wz-count-val').textContent = n;
+      ligne.querySelector('[data-moins]').disabled = n === 0;
+      ligne.querySelector('[data-plus]').disabled = n >= MAX_PAR_TYPE;
+      ligne.classList.toggle('is-on', n > 0);
+    });
+    etat.nb = total ? String(total) : null;
+    majBoutons();
+  }
+
+  compteurs.forEach(function (ligne) {
+    var cat = ligne.getAttribute('data-cat');
+    ligne.querySelector('[data-plus]').addEventListener('click', function () {
+      etat.compte[cat] = Math.min((etat.compte[cat] || 0) + 1, MAX_PAR_TYPE);
+      majCompteurs();
+    });
+    ligne.querySelector('[data-moins]').addEventListener('click', function () {
+      etat.compte[cat] = Math.max((etat.compte[cat] || 0) - 1, 0);
+      majCompteurs();
+    });
+  });
+  if (compteurs.length) majCompteurs();
+
   /* ------------------------------------------------------- CASES À COCHER */
-  var groupes = { categorie: 'categories', formule: 'formules', extra: 'extras', meuble: 'meubles' };
+  var groupes = { formule: 'formules', extra: 'extras', meuble: 'meubles' };
 
   Object.keys(groupes).forEach(function (nomGroupe) {
     var cle = groupes[nomGroupe];
@@ -530,7 +549,7 @@
 
     champCache('Prestation', etat.type || '—');
     champCache('Véhicules', auto()
-      ? etat.nb + ' — ' + (etat.categories.join(', ') || 'catégorie non précisée')
+      ? (detailVehicules() || '—')
       : '—');
     champCache('Formules voiture', auto()
       ? (etat.formules.map(function (id) { return TARIFS.formules[id].nom; }).join(', ') || '—')
