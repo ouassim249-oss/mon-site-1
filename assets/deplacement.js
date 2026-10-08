@@ -22,9 +22,9 @@
   var ZONES = [
     { max: 10, prix: 5 },                 // presque tout Rennes
     { max: 20, prix: 10 },
-    { max: 30, prix: 20, minimum: 70 },   // 70€ de prestations minimum
-    { max: 40, prix: 30, minimum: 100 },
-    { max: 50, prix: 40, minimum: 100 }
+    { max: 30, prix: 20 },
+    { max: 40, prix: 30 },
+    { max: 50, prix: 40 }
   ];
   var MAX_KM = 50;                        // au-delà : hors zone, sur devis
 
@@ -37,7 +37,6 @@
         var z = ZONES[i];
         return {
           prix: z.prix,
-          minimum: z.minimum || 0,
           texte: '+' + z.prix + '€',
           resume: 'Déplacement : ' + z.prix + '€'
         };

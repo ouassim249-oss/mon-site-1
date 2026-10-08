@@ -167,10 +167,6 @@
       } else if (d.surDevis) {
         lignes.push({ label: 'Déplacement — ' + d.commune, devis: true });
       } else {
-        if (d.minimum && total > 0 && total < d.minimum) {
-          lignes.push({ label: 'Complément minimum de commande', prix: d.minimum - total });
-          total = d.minimum;
-        }
         lignes.push({ label: 'Déplacement — ' + d.commune, prix: d.prix });
         if (d.des) approx = true;
         total += d.prix;
