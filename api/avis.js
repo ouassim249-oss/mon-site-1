@@ -27,6 +27,14 @@ var FICHE = 'ChIJK4chB00NZwYRucHhlb7uWjc';
 var WIDGET = '579bb1e0-4444-41e9-8638-7343e9bf7590';
 var GOOGLE = 'https://places.googleapis.com/v1/';
 
+/* Avis déjà publiés sur Google mais pas encore arrivés chez Featurable
+   (qui ne se met à jour qu'une fois par jour). Texte recopié EXACTEMENT
+   d'une capture d'Ouassim. Dès que Featurable renvoie un avis du même
+   auteur, celui d'ici est ignoré : on peut alors le retirer de la liste. */
+var EN_ATTENTE = [
+  { auteur: 'Christopher E.', note: 5, texte: 'Très bon travail tout est propre et professionnel', date: '2026-10-11T17:15:00Z' }
+];
+
 async function google(chemin, cle, champs, options) {
   options = options || {};
   var reponse = await fetch(GOOGLE + chemin, {
@@ -112,13 +120,15 @@ async function depuisFeaturable() {
         var note = typeof a.note === 'number' ? a.note : etoiles[a.note] || 5;
         return { auteur: nomCourt(a.nom), note: note, texte: texteOriginal(a.texte).replace(/\s*\n+\s*/g, '. ').replace(/\.\.\s/g, '. '), date: a.date || '' };
       })
-      .filter(function (a) { return a.texte; })
-      .sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+      .filter(function (a) { return a.texte; });
+    var dejaLa = avis.map(function (a) { return a.auteur; });
+    var ajoutes = EN_ATTENTE.filter(function (a) { return dejaLa.indexOf(a.auteur) < 0; });
+    avis = avis.concat(ajoutes).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     return {
       ok: true,
       source: 'featurable',
       note: Number(d.note) || null,
-      nombre: Number(d.nombre) || 0,
+      nombre: (Number(d.nombre) || 0) + ajoutes.length,
       lienFiche: d.lien || '',
       avis: avis
     };
