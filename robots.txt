@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /devis.html
+Disallow: /devis
 
 Sitemap: https://carsherwash.com/sitemap.xml
