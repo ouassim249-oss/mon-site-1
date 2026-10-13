@@ -17,7 +17,7 @@
     formules: {
       sieges:  { nom: 'Formule Sièges',  prix: 40, des: false },
       premium: {
-        nom: 'Formule Premium (coffre inclus)',
+        nom: 'Formule Premium',
         prix: 60,                       // valeur de repli si aucune catégorie n'est cochée
         parCategorie: {                 // le tarif Premium dépend du gabarit
           'Citadine / Berline': 60,

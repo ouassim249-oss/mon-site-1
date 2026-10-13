@@ -20,7 +20,8 @@
   var DEPART = { lon: -1.66, lat: 48.13 };
 
   var ZONES = [
-    { max: 10, prix: 0 },                 // offert (presque tout Rennes)
+    { max: 3, prix: 0 },                  // offert (le quartier et alentours)
+    { max: 10, prix: 5 },                 // le reste de Rennes et la proche couronne
     { max: 20, prix: 10 },
     { max: 30, prix: 20 },
     { max: 40, prix: 30 },
@@ -89,14 +90,14 @@
 
   /* Reconnaît une adresse à Rennes directement dans le texte tapé (code
      postal 35000 / 35200 / 35700, ou « Rennes » à la fin) : sert de repli
-     si le service d'adresses ne répond pas : on compte alors le premier
-     palier (offert), qui couvre presque tout Rennes. */
+     si le service d'adresses ne répond pas : on compte alors le palier
+     « jusqu'à 10 km » (5€), qui couvre tout Rennes. */
   function deviner(texte) {
     var t = (texte || '').trim();
     var cp = t.match(/\b(35\d{3})\b/);
     var rennes = cp ? /^35(000|200|700)$/.test(cp[1]) : /(^|[\s,])rennes\s*$/i.test(t);
     if (!rennes) return null;
-    var r = tarif(ZONES[0].max);
+    var r = tarif(10);
     r.km = null;
     r.estime = true;
     r.adresse = t;
