@@ -32,6 +32,7 @@ var GOOGLE = 'https://places.googleapis.com/v1/';
    d'une capture d'Ouassim. Dès que Featurable renvoie un avis du même
    auteur, celui d'ici est ignoré : on peut alors le retirer de la liste. */
 var EN_ATTENTE = [
+  { auteur: 'Serika I.', note: 5, texte: 'Je remercie carsher wash pour le nettoyage ma voiture, je recommande à 100% ils sont très professionnels', date: '2026-10-13T12:30:00Z' },
   { auteur: 'Christopher E.', note: 5, texte: 'Très bon travail tout est propre et professionnel', date: '2026-10-11T17:15:00Z' }
 ];
 
