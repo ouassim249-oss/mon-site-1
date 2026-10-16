@@ -287,8 +287,8 @@
   /* ---------- Statistiques (Vercel Web Analytics) ----------
      Les pages vues et les sites d'origine sont comptés automatiquement par
      le script Vercel chargé dans chaque page. Ici on ajoute :
-     - la provenance du visiteur, retenue dès sa première page (Google,
-       Facebook, lien ?utm_source=... d'une pub ou d'un flyer, ou "direct")
+     - la provenance du visiteur, retenue dès sa première page (Google Ads,
+       Google, Facebook, lien ?utm_source=... d'une pub ou d'un flyer, ou "direct")
        pour la joindre aux demandes de devis ;
      - un événement à chaque clic sur Appeler ou SMS. */
   function provenance() {
@@ -301,7 +301,9 @@
     var params = new URLSearchParams(location.search);
     var source = params.get('utm_source');
     var valeur;
-    if (source) {
+    if (params.get('gclid') || params.get('gbraid') || params.get('wbraid')) {
+      valeur = 'Google Ads (pub payante)';     // Google ajoute ce paramètre à chaque clic sur l'annonce
+    } else if (source) {
       valeur = source + (params.get('utm_medium') ? ' / ' + params.get('utm_medium') : '')
         + (params.get('utm_campaign') ? ' / ' + params.get('utm_campaign') : '');
     } else if (document.referrer && new URL(document.referrer).host !== location.host) {
