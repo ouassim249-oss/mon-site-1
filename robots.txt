@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /reserver
 
 Sitemap: https://carsherwash.com/sitemap.xml
