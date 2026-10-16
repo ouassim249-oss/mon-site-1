@@ -1,5 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/devis", "destination": "/reserver", "permanent": true },
+    { "source": "/devis.html", "destination": "/reserver", "permanent": true }
+  ]
 }

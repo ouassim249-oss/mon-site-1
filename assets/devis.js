@@ -3,7 +3,7 @@
    Estimation calculée en direct puis envoyée par Web3Forms.
 
    POUR MODIFIER UN TARIF : tout est dans l'objet TARIFS ci-dessous.
-   Pensez à changer aussi le prix affiché dans devis.html (les <span
+   Pensez à changer aussi le prix affiché dans reserver.html (les <span
    class="wz-opt-price">) et sur les pages auto.html / mobilier.html.
    ========================================================================== */
 (function () {

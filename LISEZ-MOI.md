@@ -12,7 +12,7 @@ contenu de ce dossier à la racine de votre hébergement, comme votre site actue
 | `mobilier.html` | Tarifs canapé / fauteuil / matelas + avant/après + FAQ |
 | `realisations.html` | Galerie avant/après voiture et mobilier |
 | `contact.html` | Coordonnées, zone, FAQ générale |
-| `devis.html` | Formulaire de demande de devis |
+| `reserver.html` | Formulaire de demande de devis |
 | `assets/style.css` | Structure et design de base (couleurs en haut du fichier) |
 | `assets/theme.css` | Thème sombre + fond animé à bulles |
 | `assets/app.js` | Menu mobile, bulles, comparateur avant/après, FAQ |
@@ -84,7 +84,7 @@ HTML (`auto.html` et `mobilier.html`) :
 - **Options** — coffre +10€ · déplacement dans Rennes +5€ · poils/sable/moisissure dès +10€
 
 Si vous changez un tarif, pensez à le changer **aussi** dans les listes déroulantes
-« Formule voiture » et « Formule mobilier » de `devis.html`.
+« Formule voiture » et « Formule mobilier » de `reserver.html`.
 
 ### 5. Le devis en 5 étapes
 
@@ -102,7 +102,7 @@ les blocs voiture n'apparaissent jamais (et inversement).
 
 > **Où changer un tarif :** tout le calcul est dans l'objet `TARIFS` en haut de
 > `assets/devis.js`. Si vous modifiez un prix, changez-le **aussi** dans
-> `devis.html` (les `<span class="wz-opt-price">`) et sur `auto.html` /
+> `reserver.html` (les `<span class="wz-opt-price">`) et sur `auto.html` /
 > `mobilier.html`.
 
 Le total affiche « dès X€ » dès qu'une ligne est un prix de départ (formule Sièges,
@@ -114,7 +114,7 @@ L'envoi utilise **Web3Forms** avec la clé déjà présente sur votre site actue
 adresse email qu'aujourd'hui. Rien à configurer.
 
 Pour changer l'adresse de réception : créez une nouvelle clé sur web3forms.com et
-remplacez la valeur du champ `access_key` dans `devis.html`.
+remplacez la valeur du champ `access_key` dans `reserver.html`.
 
 ## Le thème sombre et le fond animé
 
