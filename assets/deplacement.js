@@ -23,11 +23,10 @@
     { max: 3, prix: 0 },                  // offert (le quartier et alentours)
     { max: 10, prix: 5 },                 // le reste de Rennes et la proche couronne
     { max: 20, prix: 10 },
-    { max: 30, prix: 20 },
-    { max: 40, prix: 30 },
-    { max: 50, prix: 40 }
+    { max: 31, prix: 20 }                 // 31 et pas 30 : petite marge pour accepter
+                                          // Guichen, Tinténiac et Montfort-sur-Meu (30-31 km)
   ];
-  var MAX_KM = 50;                        // au-delà : hors zone, sur devis
+  var MAX_KM = 30;                        // distance affichée ; au-delà de la dernière zone : hors zone
 
   var API = 'https://data.geopf.fr';
 
