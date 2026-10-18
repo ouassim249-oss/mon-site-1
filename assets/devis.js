@@ -486,6 +486,8 @@
   });
 
   /* ------------------------------------------------- PRÉ-SÉLECTION ?pack= */
+  /* Venu d'une page Voiture ou Mobilier : le type est connu, on saute l'étape 1 */
+  var etapeDepart = 1;
   var pack = new URLSearchParams(window.location.search).get('pack');
   if (pack) {
     var correspondances = {
@@ -494,12 +496,13 @@
       'Canapé droit':             { type: 'Mobilier', groupe: 'meuble', valeur: 'droit' },
       "Canapé d'angle":           { type: 'Mobilier', groupe: 'meuble', valeur: 'angle' },
       'Autres textiles (matelas, chaises, tapis)': { type: 'Mobilier' },
-      'Nettoyage mobilier':       { type: 'Mobilier' }
+      'Nettoyage mobilier':       { type: 'Mobilier' },
+      'Nettoyage voiture':        { type: 'Voiture' }
     };
     var m = correspondances[pack];
     if (m) {
       var bouton = form.querySelector('[data-choice="type"] [data-value="' + m.type + '"]');
-      if (bouton) bouton.click();
+      if (bouton) { bouton.click(); etapeDepart = 2; }
       if (m.groupe) {
         var input = form.querySelector('[data-group="' + m.groupe + '"] [data-value="' + m.valeur + '"]');
         if (input) { input.checked = true; input.dispatchEvent(new Event('change')); }
@@ -615,7 +618,7 @@
       });
   });
 
-  afficher(1);
+  afficher(etapeDepart);
   pret = true;
 
   /* À l'arrivée sur la page (bouton « Estimer mon devis »…), la première
