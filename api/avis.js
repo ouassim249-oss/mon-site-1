@@ -32,7 +32,7 @@ var GOOGLE = 'https://places.googleapis.com/v1/';
    d'une capture d'Ouassim. Dès que Featurable renvoie un avis du même
    auteur, celui d'ici est ignoré : on peut alors le retirer de la liste. */
 var EN_ATTENTE = [
-  { auteur: 'Malty', note: 5, texte: "Foncer l'équipe Service, impeccable à l'écoute du client, rien à dire .", date: '2026-10-18T15:05:00Z' }
+  { auteur: 'Janea R.', note: 5, texte: "Une prestation irréprochable du début à la fin! J’ai confié le nettoyage intérieur de mon véhicule à Carsherwash et je suis absolument ravie du résultat. Un travail minutieux, soigné et réalisé avec un véritable souci du détail. Au-delà de la qualité de leur travail, je tiens à souligner leur professionnalisme, leur sérieux et leur gentillesse. C’est vraiment agréable de voir deux jeunes aussi investis et passionnés par ce qu’ils entreprennent. Ils méritent amplement d’être connus et soutenus. Je leur souhaite une très belle réussite dans leur activité. Je recommande leurs services les yeux fermés et je n’hésiterai pas à faire de nouveau appel à eux! Bravo à tous les deux et encore merci.", date: '2026-10-22T18:00:00Z' }
 ];
 
 async function google(chemin, cle, champs, options) {

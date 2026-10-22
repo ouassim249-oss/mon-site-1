@@ -1006,6 +1006,26 @@ h2 { letter-spacing: -.025em; }
   font-weight: 500;
   color: var(--navy);
 }
+/* Avis très longs : coupés à 6 lignes, « Lire la suite » pour tout voir */
+.review blockquote.review-long:not(.review-ouvert) {
+  flex: 0 0 auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.review-suite {
+  align-self: flex-start;
+  margin: -6px 0 auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--blue);
+  cursor: pointer;
+}
 .review figcaption {
   display: flex;
   flex-direction: column;

@@ -442,6 +442,18 @@
 
           fig.appendChild(etoiles);
           fig.appendChild(citation);
+          if (a.texte.length > 220) {
+            citation.classList.add('review-long');
+            var suite = document.createElement('button');
+            suite.type = 'button';
+            suite.className = 'review-suite';
+            suite.textContent = 'Lire la suite';
+            suite.addEventListener('click', function () {
+              var ouvert = citation.classList.toggle('review-ouvert');
+              suite.textContent = ouvert ? 'Réduire' : 'Lire la suite';
+            });
+            fig.appendChild(suite);
+          }
           fig.appendChild(legende);
           return fig;
         });
