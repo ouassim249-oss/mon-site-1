@@ -373,3 +373,16 @@ h1, h2, h3, h4 { color: #fff; }
 }
 .wz-count-btn[data-plus] { background: var(--blue); border-color: var(--blue); }
 .wz-count-val { color: #fff; }
+
+/* Fluidité sur téléphone : le flou derrière les cartes et la barre du haut
+   doit être recalculé à chaque image pendant le défilement, au-dessus du fond
+   animé. Sur petit écran, on le coupe et on rend les fonds un peu plus
+   opaques : visuellement presque pareil, défilement nettement plus fluide. */
+@media (max-width: 900px) {
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .site-header { background: rgba(13, 27, 42, .97); }
+  .action-bar { background: rgba(13, 27, 42, .98); }
+}
