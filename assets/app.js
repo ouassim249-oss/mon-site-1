@@ -245,11 +245,7 @@
     frame.addEventListener('mousedown', startDrag);
     frame.addEventListener('touchstart', startDrag, { passive: true });
     window.addEventListener('mousemove', onMove);
-    /* Écouteur posé sur le cadre et non sur la fenêtre : un écouteur
-       « non passif » sur toute la fenêtre oblige le téléphone à attendre le
-       script à chaque défilement, ce qui rend la page saccadée. Le doigt
-       posé sur le cadre continue d'envoyer ses mouvements au cadre. */
-    frame.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('mouseup', endDrag);
     window.addEventListener('touchend', endDrag);
     window.addEventListener('touchcancel', endDrag);
