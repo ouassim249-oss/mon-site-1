@@ -332,7 +332,7 @@
     window.cwSuivi(lien.getAttribute('href').indexOf('tel:') === 0 ? 'Appel' : 'SMS');
   });
 
-  /* ---------- Avis Google automatiques (accueil) ----------
+  /* ---------- Avis Google automatiques (accueil et page Voiture) ----------
      Les avis écrits dans index.html s'affichent d'abord. Dès que Google
      répond (via /api/avis), la note et le nombre d'avis sont mis à jour,
      et les avis sont remplacés par ceux de Google quand il en fournit le
@@ -404,11 +404,13 @@
       .then(function (d) {
         if (!d || !d.ok) return;
 
-        var badge = document.querySelector('[data-avis-badge]');
-        if (badge && d.note && d.nombre) {
-          badge.querySelector('b').textContent = d.note.toFixed(1).replace('.', ',');
-          badge.querySelector('[data-avis-nombre]').textContent =
-            d.nombre + ' avis sur Google';
+        /* Tous les badges de note de la page (haut de page, section avis) */
+        if (d.note && d.nombre) {
+          document.querySelectorAll('[data-avis-badge]').forEach(function (badge) {
+            badge.querySelector('b').textContent = d.note.toFixed(1).replace('.', ',');
+            badge.querySelector('[data-avis-nombre]').textContent =
+              d.nombre + ' avis sur Google';
+          });
         }
 
         /* Google ne fournit pas toujours le texte des avis : dans ce cas,

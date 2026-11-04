@@ -155,11 +155,83 @@
   </div>
 </header>
 
-<section class="hero hero--sub">
+<section class="hero hero--sub hero--offre">
   <div class="container">
-    <span class="hero-badge">Formules et prix</span>
+    <a class="rating-badge hero-avis" data-avis-badge href="https://g.page/r/CbnB4ZW-7lo3ECE" target="_blank" rel="noopener">
+      <b>5,0</b> <span class="stars" aria-hidden="true">★★★★★</span> <span data-avis-nombre>10 avis sur Google</span>
+    </a>
     <h1>Nettoyage intérieur de voiture à domicile</h1>
-    <p class="lead">Le détail de chaque formule, ligne par ligne, et le prix correspondant. Tout se fait chez vous, à Rennes et jusqu'à 30 km autour.</p>
+    <p class="hero-prix">
+      <span>Formule Sièges <b>40€</b></span>
+      <span>Formule Premium <b>60€ à 80€</b></span>
+    </p>
+    <img class="hero-ba" src="og-image.jpg" width="1200" height="630" fetchpriority="high"
+         alt="Intérieur de voiture avant et après notre nettoyage">
+    <p class="lead">Prix fixes, annoncés avant de venir. On se déplace chez vous, à Rennes et jusqu'à 30 km autour, 7j/7.</p>
+    <div class="btn-row hero-cta">
+      <a href="/reserver?pack=Nettoyage voiture" class="btn btn-primary btn-lg">Réserver en 2 minutes</a>
+      <a href="tel:+33627945361" class="btn btn-ghost btn-lg">06 27 94 53 61</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AVIS ================= -->
+<!-- Avis Google mis à jour tout seuls (voir api/avis.js et assets/app.js).
+     Les avis écrits ci-dessous ne servent que de secours : texte EXACT,
+     jamais inventé ni modifié. -->
+<section class="section" id="avis">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <span class="eyebrow">Avis clients</span>
+      <h2>Ce qu'en disent nos clients</h2>
+    </div>
+    <div class="reviews reviews--3x swipe" data-avis-google>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Je remercie carsher wash pour le nettoyage ma voiture, je recommande à 100% ils sont très professionnels »</blockquote>
+        <figcaption><b>Serika I.</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Très bon travail tout est propre et professionnel »</blockquote>
+        <figcaption><b>Christopher E.</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Ils m'ont rendu mon véhicule comme si il sortait de concession. Des jeunes motivés&nbsp;!&nbsp;»</blockquote>
+        <figcaption><b>Ilan</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Parfait je suis vraiment satisfait je recommande&nbsp;!&nbsp;»</blockquote>
+        <figcaption><b>Ilyace B.</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Très bien<br>Bon boulot continue comme ça »</blockquote>
+        <figcaption><b>O.Z Autos</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Rien à dire travail professionnel je recommande vivement 3 fois je nettoie pas de déception »</blockquote>
+        <figcaption><b>Rayan H.</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Merci beaucoup pour la prestation de nettoyage intérieur, la voiture est ressorti comme neuf. Sa me donne encore plus envie de conduire. Très professionnel je recommande le prix vaut le coup. »</blockquote>
+        <figcaption><b>Sami S.</b><span>Avis Google · octobre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Parfait mon véhicule est ressorti neuf, équipé sympa je recommande »</blockquote>
+        <figcaption><b>Jules B.</b><span>Avis Google · septembre 2026</span></figcaption>
+      </figure>
+      <figure class="review reveal">
+        <span class="stars" role="img" aria-label="5 étoiles sur 5">★★★★★</span>
+        <blockquote>« Très propre je recommande »</blockquote>
+        <figcaption><b>Zineddin A.</b><span>Avis Google · septembre 2026</span></figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -214,12 +286,12 @@
       </div>
     </div>
 
-    <p class="note reveal">* Les prix peuvent varier selon l'état du véhicule. Déplacement offert jusqu'à 3 km, puis de 5€ à 20€ selon la distance : le formulaire de réservation calcule le prix exact selon votre adresse. Le prix définitif est confirmé avant l'intervention.</p>
+    <p class="note reveal">Prix fixes : le prix affiché est le prix payé. Seul supplément possible : +10€ en cas de poils d'animaux, de sable ou de moisissure, toujours annoncé avant de commencer. Déplacement offert jusqu'à 3 km, puis de 5€ à 20€ selon la distance : le formulaire de réservation calcule le prix exact selon votre adresse.</p>
   </div>
 </section>
 
 <!-- ================= AVANT / APRÈS ================= -->
-<section class="section">
+<section class="section bg-soft">
   <div class="container">
     <div class="center reveal">
       <span class="eyebrow">Résultats</span>
