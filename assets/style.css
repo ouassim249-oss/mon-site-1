@@ -1450,3 +1450,21 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .wizard .wz-nav [data-next], .wizard .wz-nav [data-send] { flex: 1; width: auto; }
   .wizard .wz-nav [data-prev]:disabled { display: none; }
 }
+
+/* ==========================================================================
+   ACCUEIL SUR TÉLÉPHONE — tout le cadre du haut (titre, texte, boutons,
+   « sans engagement ») tient dans le premier écran, au-dessus de la barre
+   Appeler / Réserver
+   ========================================================================== */
+@media (max-width: 760px) {
+  .hero:not(.hero--sub) { padding: 26px 0 30px; }
+  .hero:not(.hero--sub) .hero-badge { margin-bottom: 16px; padding: 6px 14px; font-size: .74rem; }
+  .hero:not(.hero--sub) h1 { font-size: 2rem; margin-bottom: 12px; }
+  .hero:not(.hero--sub) p.lead { font-size: .98rem; line-height: 1.5; margin-bottom: 20px; }
+  .hero:not(.hero--sub) .btn-row { gap: 10px; }
+  .hero:not(.hero--sub) .btn-lg { padding: 14px 22px; }
+  .hero:not(.hero--sub) .hero-note { margin-top: 14px; font-size: .84rem; }
+}
+@media (max-width: 760px) and (max-height: 600px) {
+  .hero:not(.hero--sub) p.lead { display: none; }
+}
