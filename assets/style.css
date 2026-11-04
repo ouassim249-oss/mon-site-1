@@ -1468,3 +1468,47 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 @media (max-width: 760px) and (max-height: 600px) {
   .hero:not(.hero--sub) p.lead { display: none; }
 }
+
+/* ==========================================================================
+   RÉSERVATION SUR TÉLÉPHONE — chaque étape tient dans l'écran
+   (barre d'étapes, question, choix et boutons Retour / Suivant visibles
+   ensemble, sans avoir à faire défiler)
+   ========================================================================== */
+@media (max-width: 760px) {
+  .hero--resa { padding: 22px 0 18px; }
+  .hero--resa .hero-badge { display: none; }
+  .hero--resa h1 { font-size: 1.5rem; margin-bottom: 6px; }
+  .hero--resa p.lead { font-size: .9rem; margin-bottom: 0; }
+  .hero--resa + .section { padding-top: 8px; padding-bottom: 32px; }
+
+  .wizard { padding: 16px 16px 0; }
+  .wizard .wz-nav { margin: 16px -16px 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  .wizard .wz-nav .btn { padding-top: 13px; padding-bottom: 13px; min-width: 0; white-space: nowrap; font-size: .95rem; }
+  .wz-bar { margin-bottom: 12px; }
+  .wz-head { margin-bottom: 10px; }
+  .wz-q { font-size: 1rem; }
+  .wz-hint { font-size: .86rem; margin-bottom: 10px; line-height: 1.45; }
+  .wz-sub { margin: 16px 0 8px; }
+  .wz-opts { gap: 8px; }
+  .wz-opt { padding: 10px 12px; }
+  .wz-count-btn { width: 40px; height: 40px; }
+  .wz-choice { padding-top: 14px; padding-bottom: 14px; }
+
+  /* Coordonnées : prénom et nom côte à côte, champs plus serrés.
+     Texte des champs à 16px : en dessous, l'iPhone zoome tout seul
+     sur le champ et décadre la page. */
+  .wizard .form-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wizard .form-group { margin-bottom: 10px; }
+  .wizard .form-group label { margin-bottom: 4px; font-size: .84rem; }
+  .wizard .form-group input,
+  .wizard .form-group textarea { padding: 10px 12px; font-size: 16px; }
+  .wizard .form-group textarea { min-height: 72px; }
+  .wizard .addr-result { font-size: .8rem; margin-top: 4px; line-height: 1.4; }
+
+  .wz-recap { margin-top: 10px; padding-top: 8px; }
+  .wz-line { padding: 5px 0; font-size: .9rem; }
+  .wz-total { padding: 12px 16px; margin-top: 8px; }
+  .wz-note { font-size: .8rem; margin-top: 8px; line-height: 1.45; }
+  .wizard .form-status:empty { min-height: 0; margin: 0; }
+  .wizard .form-note { margin: 12px 0 14px; }
+}
