@@ -1398,3 +1398,117 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .wz-count-btn:disabled { opacity: .35; cursor: default; }
 .wz-count-btn[data-plus] { background: var(--blue); border-color: var(--blue); color: #fff; }
 .wz-count-val { min-width: 1.4em; text-align: center; font-weight: 700; font-size: 1.1rem; }
+
+/* ==========================================================================
+   PAGE VOITURE — haut de page « offre » : note Google, prix, avant/après
+   et bouton visibles dès l'arrivée (page d'arrivée de la pub Google)
+   ========================================================================== */
+.hero--offre { padding: 40px 0 44px; }
+.hero--offre .hero-avis { margin: 0 0 18px; }
+.hero--offre h1 { margin-bottom: 14px; }
+.hero-prix {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 10px;
+  margin: 0 auto 18px;
+}
+.hero-prix span {
+  padding: 7px 14px; border-radius: 100px;
+  background: rgba(45, 140, 240, .16); border: 1px solid rgba(45, 140, 240, .38);
+  color: #cfe4fb; font-size: .95rem;
+}
+.hero-prix b { color: #fff; margin-left: 4px; }
+.hero-ba {
+  display: block; width: 100%; max-width: 640px; height: auto;
+  margin: 0 auto 18px; border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, .12);
+}
+.hero--offre p.lead { margin-bottom: 22px; font-size: 1rem; max-width: 52ch; }
+@media (max-width: 760px) {
+  .hero--offre { padding: 18px 0 26px; }
+  .hero--offre .hero-avis { margin-bottom: 12px; padding: 6px 14px; font-size: .85rem; }
+  .hero--offre h1 { font-size: 1.65rem; margin-bottom: 12px; }
+  .hero-prix { margin-bottom: 14px; }
+  .hero-prix span { font-size: .86rem; padding: 6px 12px; }
+  .hero-ba { margin-bottom: 14px; border-radius: 10px; }
+  .hero--offre p.lead { margin-bottom: 0; font-size: .95rem; }
+  /* Sur téléphone, la barre du bas (Appeler / Réserver) fait déjà le travail */
+  .hero--offre .hero-cta { display: none; }
+}
+
+/* ==========================================================================
+   RÉSERVATION — sur téléphone, les boutons Retour / Suivant restent collés
+   en bas de l'écran : on ne cherche jamais comment continuer
+   ========================================================================== */
+@media (max-width: 760px) {
+  .wizard .wz-nav {
+    position: sticky; bottom: 0; z-index: 5;
+    flex-direction: row;
+    margin: 22px -18px 0; padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(13, 27, 42, .97);
+    border-top: 1px solid rgba(255, 255, 255, .1);
+  }
+  .wizard .wz-nav [data-prev] { flex: 0 0 auto; width: auto; min-width: 0; padding-left: 18px; padding-right: 18px; }
+  .wizard .wz-nav [data-next], .wizard .wz-nav [data-send] { flex: 1; width: auto; }
+  .wizard .wz-nav [data-prev]:disabled { display: none; }
+}
+
+/* ==========================================================================
+   ACCUEIL SUR TÉLÉPHONE — tout le cadre du haut (titre, texte, boutons,
+   « sans engagement ») tient dans le premier écran, au-dessus de la barre
+   Appeler / Réserver
+   ========================================================================== */
+@media (max-width: 760px) {
+  .hero:not(.hero--sub) { padding: 26px 0 30px; }
+  .hero:not(.hero--sub) .hero-badge { margin-bottom: 16px; padding: 6px 14px; font-size: .74rem; }
+  .hero:not(.hero--sub) h1 { font-size: 2rem; margin-bottom: 12px; }
+  .hero:not(.hero--sub) p.lead { font-size: .98rem; line-height: 1.5; margin-bottom: 20px; }
+  .hero:not(.hero--sub) .btn-row { gap: 10px; }
+  .hero:not(.hero--sub) .btn-lg { padding: 14px 22px; }
+  .hero:not(.hero--sub) .hero-note { margin-top: 14px; font-size: .84rem; }
+}
+@media (max-width: 760px) and (max-height: 600px) {
+  .hero:not(.hero--sub) p.lead { display: none; }
+}
+
+/* ==========================================================================
+   RÉSERVATION SUR TÉLÉPHONE — chaque étape tient dans l'écran
+   (barre d'étapes, question, choix et boutons Retour / Suivant visibles
+   ensemble, sans avoir à faire défiler)
+   ========================================================================== */
+@media (max-width: 760px) {
+  .hero--resa { padding: 22px 0 18px; }
+  .hero--resa .hero-badge { display: none; }
+  .hero--resa h1 { font-size: 1.5rem; margin-bottom: 6px; }
+  .hero--resa p.lead { font-size: .9rem; margin-bottom: 0; }
+  .hero--resa + .section { padding-top: 8px; padding-bottom: 32px; }
+
+  .wizard { padding: 16px 16px 0; }
+  .wizard .wz-nav { margin: 16px -16px 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+  .wizard .wz-nav .btn { padding-top: 13px; padding-bottom: 13px; min-width: 0; white-space: nowrap; font-size: .95rem; }
+  .wz-bar { margin-bottom: 12px; }
+  .wz-head { margin-bottom: 10px; }
+  .wz-q { font-size: 1rem; }
+  .wz-hint { font-size: .86rem; margin-bottom: 10px; line-height: 1.45; }
+  .wz-sub { margin: 16px 0 8px; }
+  .wz-opts { gap: 8px; }
+  .wz-opt { padding: 10px 12px; }
+  .wz-count-btn { width: 40px; height: 40px; }
+  .wz-choice { padding-top: 14px; padding-bottom: 14px; }
+
+  /* Coordonnées : prénom et nom côte à côte, champs plus serrés.
+     Texte des champs à 16px : en dessous, l'iPhone zoome tout seul
+     sur le champ et décadre la page. */
+  .wizard .form-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .wizard .form-group { margin-bottom: 10px; }
+  .wizard .form-group label { margin-bottom: 4px; font-size: .84rem; }
+  .wizard .form-group input,
+  .wizard .form-group textarea { padding: 10px 12px; font-size: 16px; }
+  .wizard .form-group textarea { min-height: 72px; }
+  .wizard .addr-result { font-size: .8rem; margin-top: 4px; line-height: 1.4; }
+
+  .wz-recap { margin-top: 10px; padding-top: 8px; }
+  .wz-line { padding: 5px 0; font-size: .9rem; }
+  .wz-total { padding: 12px 16px; margin-top: 8px; }
+  .wz-note { font-size: .8rem; margin-top: 8px; line-height: 1.45; }
+  .wizard .form-status:empty { min-height: 0; margin: 0; }
+  .wizard .form-note { margin: 12px 0 14px; }
+}

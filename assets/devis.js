@@ -600,7 +600,7 @@
         if (!json.success) throw new Error(json.message || 'Erreur');
         if (statut) {
           statut.className = 'form-status ok';
-          statut.textContent = 'Merci ! Votre demande est bien envoyée, on vous recontacte rapidement.';
+          statut.textContent = 'Merci ! Votre demande est bien envoyée. On vous rappelle dans les 2 heures (entre 9h et 19h) pour choisir le jour et l’heure.';
         }
         btnSend.hidden = true;
         if (window.cwSuivi) window.cwSuivi('Devis envoyé', { prestation: etat.type || '—' });
