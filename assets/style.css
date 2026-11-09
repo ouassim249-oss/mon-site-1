@@ -1534,3 +1534,21 @@ html.js .reveal.visible { opacity: 1; transform: none; }
   .section--suite h2 { font-size: 1.3rem; }
   .section--suite .ba { margin-top: 14px !important; }
 }
+
+/* ---------- Réalisations : sommaire Voiture / Canapé et boutons par catégorie ---------- */
+.real-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.real-nav a {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px; border-radius: 100px;
+  background: rgba(45, 140, 240, .16); border: 1px solid rgba(45, 140, 240, .38);
+  color: #fff; font-weight: 600; font-size: .95rem; text-decoration: none;
+}
+.real-nav a span { background: rgba(255, 255, 255, .14); border-radius: 100px; padding: 1px 8px; font-size: .8rem; }
+.real-nav .ico { width: 18px; height: 18px; }
+#voiture, #mobilier { scroll-margin-top: 70px; }
+.real-cta { margin-top: 26px; }
+.real-cta .btn-row { justify-content: center; }
+@media (max-width: 760px) {
+  .real-nav { margin-top: 14px; }
+  .real-cta .btn { width: 100%; }
+}
