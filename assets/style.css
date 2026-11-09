@@ -201,6 +201,8 @@ p  { margin: 0 0 1rem; }
 }
 .hero h1 { max-width: 15ch; margin: 0 auto .9rem; }
 .hero h1 .accent { color: var(--blue-light); }
+/* Petite ligne au-dessus du grand titre de l'accueil : dit à Google (et au visiteur) quoi et où. */
+.hero h1 .h1-kicker { display: block; margin-bottom: .5rem; font-size: .9rem; font-weight: 600; letter-spacing: .02em; color: #b5c6d8; }
 .hero p.lead { color: #b5c6d8; margin: 0 auto 2rem; font-size: 1.1rem; }
 .hero .btn-row { justify-content: center; }
 /* En flux normal plutôt qu'en flex : sinon l'icône se retrouve seule

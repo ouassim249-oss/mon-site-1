@@ -3,7 +3,26 @@
   "framework": null,
   "cleanUrls": true,
   "redirects": [
-    { "source": "/devis", "destination": "/reserver", "permanent": true },
-    { "source": "/devis.html", "destination": "/reserver", "permanent": true }
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.carsherwash.com"
+        }
+      ],
+      "destination": "https://carsherwash.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/devis",
+      "destination": "/reserver",
+      "permanent": true
+    },
+    {
+      "source": "/devis.html",
+      "destination": "/reserver",
+      "permanent": true
+    }
   ]
 }
