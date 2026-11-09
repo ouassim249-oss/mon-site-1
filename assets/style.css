@@ -1522,3 +1522,15 @@ html.js .reveal.visible { opacity: 1; transform: none; }
 .legal li { margin-bottom: .35rem; }
 .legal a { color: var(--blue); font-weight: 600; }
 .footer-bottom a { color: inherit; text-decoration: underline; }
+
+/* ---------- Réalisations : sur téléphone, le premier avant/après arrive tout de suite ---------- */
+@media (max-width: 760px) {
+  .hero--compact { padding: 18px 0 20px; }
+  .hero--compact .hero-badge { display: none; }
+  .hero--compact h1 { font-size: 1.65rem; margin-bottom: 8px; }
+  .hero--compact p.lead { font-size: .92rem; margin-bottom: 0; }
+  .section--suite { padding-top: 22px; }
+  .section--suite .eyebrow { display: none; }
+  .section--suite h2 { font-size: 1.3rem; }
+  .section--suite .ba { margin-top: 14px !important; }
+}
