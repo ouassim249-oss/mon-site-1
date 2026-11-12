@@ -179,28 +179,32 @@
 
     function choisir(i) {
       var f = propositions[i];
-      if (!f) return;
+      if (!f) return Promise.resolve(choisi);
       fermer();
       input.value = f.properties.label;
       var n = ++numero;
       message('Calcul du déplacement…', 'is-wait');
-      calculer(f).then(function (r) {
-        if (n !== numero) return;
+      return calculer(f).then(function (r) {
+        if (n !== numero) return choisi;
         message(r.resume, r.surDevis ? 'is-far' : (r.offert ? 'is-free' : ''));   // jamais les km : ils trahiraient le point de départ
         signaler(r);
+        return r;
       });
     }
 
-    /* Adresse tapée sans être choisie dans la liste : on prend la première
-       adresse trouvée (ou on reconnaît Rennes dans le texte). */
+    /* Adresse tapée (ou remplie automatiquement par le téléphone) sans être
+       choisie dans la liste : on prend la première adresse trouvée, la plus
+       proche de Rennes. Renvoie une promesse avec le résultat (ou null). */
     function resoudre() {
-      if ((choisi && !choisi.devine) || input.value.trim().length < 3) return;
+      if ((choisi && !choisi.devine) || input.value.trim().length < 3) return Promise.resolve(choisi);
       var texte = input.value.trim();
       var n = numero;
-      chercher(texte).then(function (res) {
-        if (n !== numero || (choisi && !choisi.devine)) return;
-        if (res.length) { propositions = res; choisir(0); }
-      }).catch(function () {});
+      return chercher(texte).then(function (res) {
+        if (n !== numero || (choisi && !choisi.devine)) return choisi;
+        if (!res.length) return choisi;
+        propositions = res;
+        return choisir(0);
+      }).catch(function () { return choisi; });
     }
 
     input.addEventListener('input', function () {
@@ -220,6 +224,10 @@
         chercher(texte).then(function (res) {
           if (n !== numero) return;
           propositions = res;
+          /* Champ rempli sans le clavier (remplissage automatique du
+             téléphone) : personne ne choisira dans la liste, on prend la
+             première adresse directement. */
+          if (res.length && document.activeElement !== input) { choisir(0); return; }
           afficherListe();
           if (!res.length && !choisi) message('Adresse introuvable. Vérifiez l’orthographe ou indiquez juste votre commune.', 'is-far');
         }).catch(function () {
