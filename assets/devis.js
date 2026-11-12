@@ -79,8 +79,9 @@
   /* Adresse d'intervention : le prix du déplacement est calculé dès que
      le client choisit son adresse dans la liste. */
   var champAdresse = document.getElementById('q-adresse');
+  var calcAdresse = null;
   if (champAdresse && window.cwDeplacement) {
-    window.cwDeplacement.attacher(champAdresse, {
+    calcAdresse = window.cwDeplacement.attacher(champAdresse, {
       resultat: form.querySelector('[data-addr-result]'),
       change: function (r) { etat.depl = r; majBoutons(); if (etape === TOTAL_ETAPES) majRecap(); }
     });
@@ -478,7 +479,28 @@
   /* ------------------------------------------------------------ NAVIGATION */
   btnNext.addEventListener('click', function () {
     if (!etapeValide(etape)) return;
-    if (etape < TOTAL_ETAPES) afficher(etape + 1);
+    if (etape >= TOTAL_ETAPES) return;
+
+    /* Étape adresse : si le client n'a pas cliqué sur une adresse de la
+       liste, on la cherche nous-mêmes avant d'afficher le récapitulatif,
+       pour que le prix du déplacement soit compté (4 s au plus). */
+    var d = etat.depl;
+    if (calcAdresse && champAdresse && !champAdresse.closest('[hidden]') && (!d || d.devine)) {
+      var texteBouton = btnNext.textContent;
+      btnNext.disabled = true;
+      btnNext.textContent = 'Calcul…';
+      var fini = false;
+      var suite = function () {
+        if (fini) return;
+        fini = true;
+        btnNext.textContent = texteBouton;
+        afficher(etape + 1);
+      };
+      calcAdresse.resoudre().then(suite, suite);
+      setTimeout(suite, 4000);
+      return;
+    }
+    afficher(etape + 1);
   });
 
   btnPrev.addEventListener('click', function () {
