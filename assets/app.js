@@ -355,6 +355,8 @@
     var copies = cartes.map(function (c) {
       var copie = c.cloneNode(true);
       copie.setAttribute('aria-hidden', 'true');
+      copie.setAttribute('inert', '');   // copie décorative : ni lecteur d'écran ni touche Tab
+      copie.querySelectorAll('a, button').forEach(function (el) { el.setAttribute('tabindex', '-1'); });
       bloc.appendChild(copie);
       return copie;
     });

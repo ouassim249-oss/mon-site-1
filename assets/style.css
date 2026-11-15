@@ -7,9 +7,9 @@
   --navy: #0d1b2a;
   --navy2: #1a2e42;
   --navy3: #24405c;
-  --blue: #2d8cf0;
+  --blue: #1c76d8;
   --blue-light: #5aaaf5;
-  --blue-dark: #1c6fc9;
+  --blue-dark: #1560b4;
   --blue-pale: #e8f3fd;
   --white: #ffffff;
   --off: #f5f7fa;
@@ -625,6 +625,7 @@ p  { margin: 0 0 1rem; }
   text-align: center;
 }
 .contact-card .card-icon { margin: 0 auto 16px; }
+.contact-card h2 { font-size: 1.22rem; letter-spacing: -.02em; }
 .contact-card a { display: block; font-weight: 700; color: var(--navy); font-size: 1.05rem; margin-bottom: 4px; }
 .contact-card a:hover { color: var(--blue); }
 .contact-card p { color: var(--gray); font-size: .93rem; margin: 4px 0 0; }
@@ -1165,7 +1166,9 @@ a.hero-stat:hover { border-color: rgba(90, 170, 245, .5); }
   font-size: .93rem;
 }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 36px; }
-.site-footer h4 {
+.site-footer .footer-title {
+  line-height: 1.15;
+  font-weight: 700;
   color: #fff;
   font-size: .78rem;
   letter-spacing: .14em;
